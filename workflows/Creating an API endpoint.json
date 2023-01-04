@@ -24,9 +24,9 @@
       ]
     }
   },
-  "createdAt": "2023-01-05T02:27:01.951Z",
+  "createdAt": "2023-01-05T02:27:02.134Z",
   "dataLoaded": false,
-  "id": 4,
+  "id": 5,
   "name": "Creating an API endpoint",
   "nodes": [
     {
@@ -116,8 +116,15 @@
   "pinData": {},
   "settings": {},
   "staticData": null,
-  "tags": [],
+  "tags": [
+    {
+      "createdAt": "2023-01-05T02:26:16.601Z",
+      "updatedAt": "2023-01-05T02:26:16.601Z",
+      "id": "1",
+      "name": "Demo"
+    }
+  ],
   "triggerCount": 0,
-  "updatedAt": "2023-01-05T02:27:01.951Z",
-  "versionId": "62a97d3f-b053-491e-a37b-8446d5c6fa05"
+  "updatedAt": "2023-01-05T02:27:02.134Z",
+  "versionId": "8355bbfc-1f93-4088-b218-5caf478f5729"
 }
