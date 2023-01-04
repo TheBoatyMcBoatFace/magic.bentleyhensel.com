@@ -1,0 +1,326 @@
+{
+  "active": false,
+  "connections": {
+    "SplitInBatches": {
+      "main": [
+        [
+          {
+            "node": "Wait for time interval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Datastore": {
+      "main": [
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create approval URL": {
+      "main": [
+        [
+          {
+            "node": "Customer Messenger - Send URL to merchant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - Are we Finished?": {
+      "main": [
+        [
+          {
+            "node": "Create approval URL",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "SplitInBatches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On clicking 'execute'": {
+      "main": [
+        [
+          {
+            "node": "Customer Datastore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for time interval": {
+      "main": [
+        [
+          {
+            "node": "Customer Messenger - Send message to client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for external approval": {
+      "main": [
+        [
+          {
+            "node": "Rest of the workflow placeholder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Messenger - Send URL to merchant": {
+      "main": [
+        [
+          {
+            "node": "Wait for external approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Messenger - Send message to client": {
+      "main": [
+        [
+          {
+            "node": "If - Are we Finished?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-05T02:26:19.357Z",
+  "dataLoaded": false,
+  "id": 2,
+  "name": "Rate limiting and waiting for external events",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "On clicking 'execute'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        580,
+        380
+      ],
+      "typeVersion": 1,
+      "id": "32bbdb6a-9020-4c64-b56e-1d58c3529933"
+    },
+    {
+      "parameters": {
+        "content": "## 2. Wait for an external event\nUse this operation when an external step is needed in order to continue with the rest of the workflow.\nFor example - a workflow sends a purchase approval link to the merchant (using Gmail, Slack etc..) and waits for the merchant to click on it before continuing with the rest of the steps.\n\nIn this example, the `Customer Messenger` node mimics the email or messaging node.\n",
+        "height": 360,
+        "width": 780
+      },
+      "name": "Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1680,
+        220
+      ],
+      "typeVersion": 1,
+      "id": "885d716d-79c3-483b-b7cf-5203f1421511"
+    },
+    {
+      "parameters": {
+        "content": "### Click the `Execute Workflow` button and double click on the nodes to see the input and output items.",
+        "height": 120,
+        "width": 300
+      },
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        380,
+        240
+      ],
+      "typeVersion": 1,
+      "id": "911d2151-92da-4ce1-a342-295bf2b20b8b"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "URL",
+              "value": "={{$resumeWebhookUrl}}?name=nathan"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Create approval URL",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1720,
+        380
+      ],
+      "typeVersion": 1,
+      "id": "e103fccf-944c-404d-912c-d09a8dd91110"
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "name": "Wait for external approval",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        2120,
+        380
+      ],
+      "webhookId": "0bcafff8-9fc1-4415-95b1-00746bb1304d",
+      "typeVersion": 1,
+      "id": "1337f7ee-4f52-436b-88f2-2e906163745b"
+    },
+    {
+      "parameters": {},
+      "name": "Rest of the workflow placeholder",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        2320,
+        380
+      ],
+      "typeVersion": 1,
+      "id": "335c8654-b00c-4d3f-aa10-800a704978dc"
+    },
+    {
+      "parameters": {
+        "operation": "getAllPeople",
+        "returnAll": true
+      },
+      "name": "Customer Datastore",
+      "type": "n8n-nodes-base.n8nTrainingCustomerDatastore",
+      "position": [
+        760,
+        380
+      ],
+      "typeVersion": 1,
+      "id": "0ea3f9ff-1468-44ea-bdd6-f70ad86929f7"
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "name": "SplitInBatches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        940,
+        380
+      ],
+      "typeVersion": 1,
+      "id": "c2d0a287-7803-4f39-914f-95fc95d63758"
+    },
+    {
+      "parameters": {
+        "content": "## 1. Rate Limiting \nSometimes you need to slow down how often you are contacting a service.\n\nIn this example, `Customer Datastore` node simulates the big batches of requests coming at once, the `SplitInBatches` node handles each one individually in a loop, and the `Wait` node creates a 2 second delay between each message to a customer.",
+        "height": 360,
+        "width": 900
+      },
+      "name": "Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        720,
+        220
+      ],
+      "typeVersion": 1,
+      "id": "b50cf02a-435c-4caa-9a09-52afe09fbc49"
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "seconds"
+      },
+      "name": "Wait for time interval",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        1100,
+        380
+      ],
+      "webhookId": "2b72e9d7-75b7-4ef5-87e7-2bfdfdbaa20f",
+      "typeVersion": 1,
+      "id": "72ca40bb-9a06-4628-a1ee-bd6270bef874"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{$node[\"SplitInBatches\"].context[\"noItemsLeft\"]}}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "If - Are we Finished?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1460,
+        380
+      ],
+      "typeVersion": 1,
+      "id": "0530afc3-ebdb-4153-92d7-2176070a69b2"
+    },
+    {
+      "parameters": {
+        "customerId": "1",
+        "message": "={{$json[\"URL\"]}}"
+      },
+      "name": "Customer Messenger - Send URL to merchant",
+      "type": "n8n-nodes-base.n8nTrainingCustomerMessenger",
+      "position": [
+        1920,
+        380
+      ],
+      "typeVersion": 1,
+      "id": "a237d40d-4aa9-4f5a-bf91-069e24741276"
+    },
+    {
+      "parameters": {
+        "customerId": "={{$node[\"Customer Datastore\"].json[\"id\"]}}",
+        "message": "=\nHi {{$node[\"Customer Datastore\"].json[\"name\"]}}\nThis message was sent at {{$now.toLocaleString(DateTime.TIME_WITH_SECONDS)}}"
+      },
+      "name": "Customer Messenger - Send message to client",
+      "type": "n8n-nodes-base.n8nTrainingCustomerMessenger",
+      "position": [
+        1280,
+        380
+      ],
+      "typeVersion": 1,
+      "id": "0672e88b-0b47-442c-aedf-b468c11773a5"
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [
+    {
+      "createdAt": "2023-01-05T02:26:16.601Z",
+      "updatedAt": "2023-01-05T02:26:16.601Z",
+      "id": "1",
+      "name": "Demo"
+    }
+  ],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-05T02:26:19.357Z",
+  "versionId": "61eeb83c-7b6e-45e9-96e0-a62a84bdb74d"
+}
