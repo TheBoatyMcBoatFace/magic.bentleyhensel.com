@@ -108,9 +108,9 @@
       ]
     }
   },
-  "createdAt": "2023-01-05T02:26:19.357Z",
+  "createdAt": "2023-01-05T02:26:19.454Z",
   "dataLoaded": false,
-  "id": 2,
+  "id": 3,
   "name": "Rate limiting and waiting for external events",
   "nodes": [
     {
@@ -312,15 +312,8 @@
   "pinData": {},
   "settings": {},
   "staticData": null,
-  "tags": [
-    {
-      "createdAt": "2023-01-05T02:26:16.601Z",
-      "updatedAt": "2023-01-05T02:26:16.601Z",
-      "id": "1",
-      "name": "Demo"
-    }
-  ],
+  "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2023-01-05T02:26:19.357Z",
-  "versionId": "61eeb83c-7b6e-45e9-96e0-a62a84bdb74d"
+  "updatedAt": "2023-01-05T02:26:19.454Z",
+  "versionId": "81b7007a-6182-4996-aa36-fc21c6bfe242"
 }
