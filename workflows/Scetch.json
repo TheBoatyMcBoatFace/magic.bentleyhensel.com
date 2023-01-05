@@ -1,0 +1,54 @@
+{
+  "active": false,
+  "connections": {
+    "Spotify": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2023-01-05T02:53:54.534Z",
+  "dataLoaded": false,
+  "id": 6,
+  "name": "Scetch",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "fa26c535-d32c-4e74-8da0-a4ba56a00123",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        320,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "myData",
+        "operation": "currentlyPlaying"
+      },
+      "id": "46b3e4b9-c651-4841-ad81-8b3a7a77024d",
+      "name": "Spotify",
+      "type": "n8n-nodes-base.spotify",
+      "typeVersion": 1,
+      "position": [
+        380,
+        200
+      ],
+      "credentials": {
+        "spotifyOAuth2Api": {
+          "id": "5",
+          "name": "BentleyHensel Spotify"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-05T02:53:54.534Z",
+  "versionId": "f80de401-2a54-45c1-9875-c97644cfddb6"
+}
