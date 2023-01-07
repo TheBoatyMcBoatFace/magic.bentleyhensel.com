@@ -1,0 +1,360 @@
+{
+  "active": true,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Get All Domain Values",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get most recent url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get most recent url": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All Domain Values": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get All Domain Values",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-07T13:28:51.317Z",
+  "id": "13",
+  "name": "Send Domain Results to Google",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ad8521b9-00e8-4257-9999-eda25dbf4ca8",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT a.domain as \"Domain\", to_char(a.scanned_at, 'MM/DD/YYYY HH12:MI') as \"Scanned At\", a.page_load_time as \"Page Load Time (ms)\", a.total_issues as \"Total Issues\", a.error_count as \"Error Count\", a.warning_count as \"Warning Count\", a.notice_count as \"Notice Count\", a.ada_score as \"ADA Score\"\nFROM a11y.scans a\nJOIN (\n  SELECT domain, MAX(scanned_at) as scanned_at\n  FROM a11y.scans\n  WHERE success = true\n  GROUP BY domain\n  ORDER BY MAX(scanned_at) DESC\n) b ON a.domain = b.domain AND a.scanned_at = b.scanned_at;",
+        "additionalFields": {}
+      },
+      "id": "7febcd21-1039-4682-96c5-66d4a7e4065a",
+      "name": "Get All Domain Values",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1780,
+        1080
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "f9d3a73f-5cc1-4fdd-8550-1d329edada0c",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        1400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT a.domain as \"Domain\", to_char(a.scanned_at, 'MM/DD/YYYY HH12:MI') as \"Scanned At\", a.page_load_time as \"Page Load Time (ms)\", a.total_issues as \"Total Issues\", a.error_count as \"Error Count\", a.warning_count as \"Warning Count\", a.notice_count as \"Notice Count\", a.ada_score as \"ADA Score\" FROM a11y.scans a JOIN (   SELECT domain, MAX(scanned_at) as scanned_at   FROM a11y.scans   WHERE success = true   GROUP BY domain   ORDER BY MAX(scanned_at) DESC   LIMIT 1 ) b ON a.domain = b.domain AND a.scanned_at = b.scanned_at;",
+        "additionalFields": {}
+      },
+      "id": "46570193-e862-4c38-aaf9-1dbff58726f9",
+      "name": "Get most recent url",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1800,
+        1400
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=0",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Top Lines",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=0"
+        },
+        "columnToMatchOn": "Domain",
+        "valueToMatchOn": "={{ $json[\"Domain\"] }}",
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "Scanned At",
+              "fieldValue": "={{ $json[\"Scanned At\"] }}"
+            },
+            {
+              "column": "Page Load Time (ms)",
+              "fieldValue": "={{ $json[\"Page Load Time (ms)\"] }}"
+            },
+            {
+              "column": "Total Issues",
+              "fieldValue": "={{ $json[\"Total Issues\"] }}"
+            },
+            {
+              "column": "Error Count",
+              "fieldValue": "={{ $json[\"Error Count\"] }}"
+            },
+            {
+              "column": "Warning Count",
+              "fieldValue": "={{ $json[\"Warning Count\"] }}"
+            },
+            {
+              "column": "Notice Count",
+              "fieldValue": "={{ $json[\"Notice Count\"] }}"
+            },
+            {
+              "column": "ADA Score",
+              "fieldValue": "={{ $json[\"ADA Score\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "a74c3a71-bd65-4d7b-a38d-5db54c5be7ec",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        2120,
+        1400
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=0",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Top Lines",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=0"
+        },
+        "columnToMatchOn": "Domain",
+        "valueToMatchOn": "={{ $json[\"Domain\"] }}",
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "Scanned At",
+              "fieldValue": "={{ $json[\"Scanned At\"] }}"
+            },
+            {
+              "column": "Page Load Time (ms)",
+              "fieldValue": "={{ $json[\"Page Load Time (ms)\"] }}"
+            },
+            {
+              "column": "Total Issues",
+              "fieldValue": "={{ $json[\"Total Issues\"] }}"
+            },
+            {
+              "column": "Error Count",
+              "fieldValue": "={{ $json[\"Error Count\"] }}"
+            },
+            {
+              "column": "Warning Count",
+              "fieldValue": "={{ $json[\"Warning Count\"] }}"
+            },
+            {
+              "column": "Notice Count",
+              "fieldValue": "={{ $json[\"Notice Count\"] }}"
+            },
+            {
+              "column": "ADA Score",
+              "fieldValue": "={{ $json[\"ADA Score\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "8e68a8e9-2062-4455-a24c-46a8ab011c69",
+      "name": "Google Sheets1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        2260,
+        1080
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 25,
+        "options": {}
+      },
+      "id": "51f6a591-c7d2-4d09-9f71-8c7b18d452e3",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 20,
+        "unit": "seconds"
+      },
+      "id": "7149ab98-a945-4c71-9b07-b08edf9fe80a",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        1080
+      ],
+      "webhookId": "f3cc42d4-fe7f-4222-9185-c6475ccd7d46"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 9
+            }
+          ]
+        }
+      },
+      "id": "0615034f-b741-425e-afaa-448903690b32",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        900
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrencyRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2023-01-07T13:58:18.200Z",
+  "versionId": "0e7820c0-d476-45a0-8a52-19a5f2cd37b2"
+}
