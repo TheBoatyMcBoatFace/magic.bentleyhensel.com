@@ -1,0 +1,183 @@
+{
+  "active": true,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Domain Hero Values",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Domain Hero Values": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Write to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write to Sheets": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-07T10:18:05.726Z",
+  "id": "11",
+  "name": "Domain Metrics",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 18
+            }
+          ]
+        }
+      },
+      "id": "7734d613-d244-488e-a0ac-26652e3a6464",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        180,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT s1.domain as \"Domain\",  TO_CHAR(s1.scanned_at AT TIME ZONE 'EST', 'MM/DD/YYYY HH:MI TZ') as \"Scanned At\", s1.page_load_time  as \"Page Load Time (ms)\", s1.total_issues as \"Total Issues\", s1.error_count as \"Error Count\", s1.warning_count as \"Warning Count\", s1.notice_count as \"Notice Count\", s1.ada_score as \"ADA Score\" FROM a11y.scans s1 WHERE s1.scanned_at = (SELECT MAX(s2.scanned_at) FROM a11y.scans s2 WHERE s1.domain = s2.domain) order by domain asc;",
+        "additionalFields": {}
+      },
+      "id": "41271b36-a4f6-4fdb-9e27-634c0b7f5129",
+      "name": "Get Domain Hero Values",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        400,
+        360
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=0",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Top Lines",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=0"
+        },
+        "dataMode": "autoMapInputData",
+        "columnToMatchOn": "Domain",
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "50b16441-8b28-481c-9dfb-462cda389b46",
+      "name": "Write to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        900,
+        360
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 50,
+        "options": {}
+      },
+      "id": "baeafde1-8f0f-4af7-bbac-740484e716de",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        680,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 15,
+        "unit": "seconds"
+      },
+      "id": "62dc4662-0861-42e5-81fd-9f10c2af61a3",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        360
+      ],
+      "webhookId": "95c61682-f1f2-4fdd-8509-b1f8e98e6a00"
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrencyRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2023-01-07T11:12:04.646Z",
+  "versionId": "aec829bc-8950-48d1-a00d-2c2d5f05961b"
+}
