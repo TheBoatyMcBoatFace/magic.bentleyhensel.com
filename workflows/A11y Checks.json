@@ -38,12 +38,12 @@
       "main": [
         [
           {
-            "node": "Item Lists",
+            "node": "Record Scan",
             "type": "main",
             "index": 0
           },
           {
-            "node": "Record Scan",
+            "node": "Are there Issues?",
             "type": "main",
             "index": 0
           }
@@ -131,7 +131,7 @@
       "main": [
         [
           {
-            "node": "No Operation, do nothing",
+            "node": "Get Domains",
             "type": "main",
             "index": 0
           }
@@ -171,7 +171,36 @@
       "main": [
         [
           {
-            "node": "Get Domains",
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Are there Issues?": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Domain Checked At",
             "type": "main",
             "index": 0
           }
@@ -224,7 +253,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT domain\nFROM a11y.domains_gov\nWHERE scanned_at < NOW() - INTERVAL '20 hours' OR scanned_at IS NULL\nLIMIT 1;",
+        "query": "SELECT domain FROM a11y.domains_gov WHERE (scanned_at < NOW() - INTERVAL '20 hours' OR scanned_at IS NULL) AND (scan_error_at < NOW() - INTERVAL '20 hours' OR scan_error_at IS NULL) ORDER BY RANDOM() LIMIT 1;",
         "additionalFields": {}
       },
       "id": "02008f99-a0a3-4371-89f9-917413abdd3c",
@@ -257,7 +286,7 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={ \"url\": \"https://ABINGTONMA.GOV\",\n\"pageInsights\": true }",
+        "jsonBody": "={ \"url\": \"https://{{ $json[\"domain\"] }}\",\n\"pageInsights\": true }",
         "options": {}
       },
       "id": "edd8e488-3cbc-4f2e-a02b-8c39f8050781",
@@ -364,9 +393,10 @@
       "type": "n8n-nodes-base.itemLists",
       "typeVersion": 1,
       "position": [
-        1620,
-        500
-      ]
+        1840,
+        300
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -381,7 +411,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
       "position": [
-        1540,
+        1760,
         680
       ],
       "credentials": {
@@ -408,7 +438,7 @@
       "type": "n8n-nodes-base.renameKeys",
       "typeVersion": 1,
       "position": [
-        1760,
+        1980,
         680
       ]
     },
@@ -423,8 +453,8 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 2,
       "position": [
-        2080,
-        560
+        2380,
+        520
       ]
     },
     {
@@ -444,16 +474,16 @@
       "type": "n8n-nodes-base.renameKeys",
       "typeVersion": 1,
       "position": [
-        1840,
-        500
+        2100,
+        300
       ]
     },
     {
       "parameters": {
         "schema": "a11y",
         "table": "issues",
-        "columns": "scan_id,code,type,type_code,message,context,selector,runner,recurrence,domain",
-        "returnFields": "scan_id,domain",
+        "columns": "scan_id,code,type,type_code,message,context,selector,runner,recurrence,domain,scanned_at",
+        "returnFields": "scan_id,domain,scanned_at",
         "additionalFields": {}
       },
       "id": "e869caab-82c9-4a35-b702-c5fc008a3e30",
@@ -461,8 +491,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
       "position": [
-        2320,
-        560
+        2660,
+        620
       ],
       "credentials": {
         "postgres": {
@@ -472,24 +502,12 @@
       }
     },
     {
-      "parameters": {},
-      "id": "7b19a38e-f9ff-4f0a-9782-a4ca4f187de3",
-      "name": "No Operation, do nothing",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
-      "position": [
-        2760,
-        720
-      ],
-      "executeOnce": true
-    },
-    {
       "parameters": {
         "operation": "update",
         "schema": "a11y",
         "table": "domains_gov",
         "updateKey": "domain",
-        "columns": "scanned_at",
+        "columns": "scanned_at:timestamptz",
         "returnFields": "id",
         "additionalFields": {}
       },
@@ -498,8 +516,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
       "position": [
-        2520,
-        680
+        2840,
+        960
       ],
       "executeOnce": true,
       "credentials": {
@@ -527,7 +545,7 @@
       "typeVersion": 1,
       "position": [
         840,
-        600
+        520
       ]
     },
     {
@@ -565,8 +583,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
       "position": [
-        1240,
-        960
+        1560,
+        880
       ],
       "credentials": {
         "postgres": {
@@ -574,6 +592,46 @@
           "name": "PostyTheGres: Gates of the Arctic"
         }
       }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 18
+            }
+          ]
+        }
+      },
+      "id": "d9e71fff-be58-4cd9-bedb-e29ec9570976",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json[\"total_issues\"] }}",
+              "operation": "larger"
+            }
+          ]
+        }
+      },
+      "id": "6cffa7c6-23f8-4623-8a24-6783887a4afb",
+      "name": "Are there Issues?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        420
+      ]
     }
   ],
   "pinData": {},
@@ -581,6 +639,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2023-01-07T09:58:05.789Z",
-  "versionId": "dc948760-9c94-43a9-965c-ea5771aff849"
+  "updatedAt": "2023-01-07T11:17:49.254Z",
+  "versionId": "d5f74007-4075-4dd2-b8a4-73dfe8c42955"
 }
