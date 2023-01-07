@@ -1,0 +1,76 @@
+{
+  "active": false,
+  "connections": {
+    "Trello Trigger": {
+      "main": [
+        [
+          {
+            "node": "Trello",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-06T22:12:25.244Z",
+  "id": "7",
+  "name": "Scratches",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "efb27463-fe1b-4e57-ae24-ffeb83a0b381",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        600,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "9c1bafda-3805-46c3-8baf-3a33f19516ec",
+      "name": "Trello Trigger",
+      "type": "n8n-nodes-base.trelloTrigger",
+      "typeVersion": 1,
+      "position": [
+        820,
+        300
+      ],
+      "webhookId": "ff451411-2213-4623-b6c6-9edd2c4a74f1",
+      "credentials": {
+        "trelloApi": {
+          "id": "6",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "id": "5c783ea5-414f-4020-a7a2-ebefb5f77610",
+      "name": "Trello",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        300
+      ],
+      "credentials": {
+        "trelloApi": {
+          "id": "6",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-06T22:12:25.244Z",
+  "versionId": "91e0a2c7-261b-486f-a502-e18d84d615a0"
+}
