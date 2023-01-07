@@ -1,11 +1,115 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "When clicking \"Execute Workflow\"": {
       "main": [
         [
           {
             "node": "Domains per Hour",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Federal Agency Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Federal Agency Stats": {
+      "main": [
+        [
+          {
+            "node": "Federal Agencies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Non-Federal Agency Results": {
+      "main": [
+        [
+          {
+            "node": "Non-Federal Agencies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "State Results": {
+      "main": [
+        [
+          {
+            "node": "States",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Domains per Hour": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Federal Agency Stats",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Non-Federal Agency Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Federal Agencies": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "State Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Non-Federal Agencies": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
             "type": "main",
             "index": 0
           }
@@ -24,8 +128,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        300,
-        360
+        120,
+        560
       ]
     },
     {
@@ -39,8 +143,30 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
       "position": [
-        600,
-        360
+        620,
+        240
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT d.agency AS \"Agency\",  ROUND(AVG(s.ada_score)) AS \"ADA Score (AVG)\", ROUND(AVG(s.page_load_time)) AS \"Page Load Time (AVG s)\",  ROUND(sum(s.total_issues)) AS \"Issues Count\", COUNT(DISTINCT d.domain) AS \"Domain Count\" FROM a11y.domains_gov d JOIN a11y.scans s ON d.domain = s.domain WHERE d.agency != 'Non-Federal Agency' GROUP BY d.agency ORDER BY \"ADA Score (AVG)\" DESC;",
+        "additionalFields": {}
+      },
+      "id": "2f860b62-3f5e-4405-8127-861b4463e50b",
+      "name": "Federal Agency Stats",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        620,
+        440
       ],
       "credentials": {
         "postgres": {
@@ -48,13 +174,250 @@
           "name": "PostyTheGres: Gates of the Arctic"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=1451962725",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1451962725,
+          "mode": "list",
+          "cachedResultName": "Federal Agencies",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=1451962725"
+        },
+        "dataMode": "autoMapInputData",
+        "columnToMatchOn": "Agency",
+        "options": {}
+      },
+      "id": "148de471-9a0a-4afc-96b2-0236258c51bd",
+      "name": "Federal Agencies",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        960,
+        440
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=1451962725",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1777587102,
+          "mode": "list",
+          "cachedResultName": "Non-Federal Agencies",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=1777587102"
+        },
+        "dataMode": "autoMapInputData",
+        "columnToMatchOn": "Agency Type",
+        "options": {}
+      },
+      "id": "78e836e8-1b46-4c6f-abb0-53ceb5534ee0",
+      "name": "Non-Federal Agencies",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        1260,
+        660
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT d.state AS \"State\", ROUND(AVG(s.ada_score)) AS \"ADA Score (AVG)\", ROUND(AVG(s.page_load_time)) AS \"Page Load Time (AVG s)\",  ROUND(sum(s.total_issues)) AS \"Issue Count\", COUNT(DISTINCT d.domain) AS \"Domain Count\" FROM a11y.domains_gov d JOIN a11y.scans s ON d.domain = s.domain WHERE d.agency = 'Non-Federal Agency' GROUP BY d.state ORDER BY \"ADA Score (AVG)\" DESC;",
+        "additionalFields": {}
+      },
+      "id": "2133823b-3257-44dd-af50-091632278b32",
+      "name": "State Results",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        1080
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT d.domain_type AS \"Agency Type\", ROUND(AVG(s.ada_score)) AS \"ADA Score (AVG)\", ROUND(AVG(s.page_load_time)) AS \"Page Load Time (AVG s)\",  ROUND(sum(s.total_issues)) AS \"Issue Count\", COUNT(DISTINCT d.domain) AS \"Domain Count\" FROM a11y.domains_gov d JOIN a11y.scans s ON d.domain = s.domain WHERE d.agency = 'Non-Federal Agency' GROUP BY d.domain_type ORDER BY \"ADA Score (AVG)\" DESC;",
+        "additionalFields": {}
+      },
+      "id": "c448113d-79c8-4917-978d-b2a012db30b3",
+      "name": "Non-Federal Agency Results",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1040,
+        660
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=457606236",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 457606236,
+          "mode": "list",
+          "cachedResultName": "Domain Stats",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=457606236"
+        },
+        "columnToMatchOn": "Domains per Hour",
+        "valueToMatchOn": "={{ $json[\"Domains per Hour\"] }}",
+        "options": {}
+      },
+      "id": "ac2b5e25-81e6-4eff-9cbe-c6760488b9ad",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        840,
+        240
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=1451962725",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 104391553,
+          "mode": "list",
+          "cachedResultName": "States",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZHS5X8CQqYKq9rENuDLfMlCwj-KPvr3UGV-mbuEApT8/edit#gid=104391553"
+        },
+        "dataMode": "autoMapInputData",
+        "columnToMatchOn": "State",
+        "options": {}
+      },
+      "id": "09db9d24-0e3b-4953-8c2e-1d8172d0c2e4",
+      "name": "States",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        1660,
+        1000
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "63779e92-07e6-4174-b6d9-7613824f5e94",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        60,
+        840
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "49d09ad2-04e3-447c-b986-6037b34df63b",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        800,
+        640
+      ],
+      "webhookId": "e523148e-4a46-4f40-91aa-c5bf6dd8127a"
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "seconds"
+      },
+      "id": "ed020c94-0360-40a4-8bc7-f8f799860dbc",
+      "name": "Wait2",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        980,
+        920
+      ],
+      "webhookId": "879425b2-db59-4918-baaf-c5ba9ef2dc34"
     }
   ],
   "pinData": {},
   "settings": {},
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrencyRules": []
+    }
+  },
   "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2023-01-07T11:15:44.589Z",
-  "versionId": "217c3710-6ece-44c8-b545-1a0a7ec84d6b"
+  "triggerCount": 1,
+  "updatedAt": "2023-01-07T13:00:54.285Z",
+  "versionId": "83ab8a37-b01b-4b2a-820e-de42d5b12324"
 }
