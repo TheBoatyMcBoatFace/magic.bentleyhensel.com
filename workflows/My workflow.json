@@ -1,0 +1,131 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-06T23:08:25.327Z",
+  "id": "8",
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "83c09345-5b10-4ce7-9414-a6562fc59ba9",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://rpilocator.com/feed/"
+      },
+      "id": "12df0099-0e10-4d83-9520-500d7dd4298c",
+      "name": "RSS Read",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        460,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "id": "c22f9d68-b309-427d-b9a9-0890f5f286dd",
+      "name": "Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        940,
+        480
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "d8fd2832-8dc2-46fe-86fa-f6e180de0b4c",
+        "options": {}
+      },
+      "id": "a5a6f839-b2ae-452e-b96a-1486be8c0e73",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "webhookId": "d8fd2832-8dc2-46fe-86fa-f6e180de0b4c"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "Store",
+              "value": "={{ $json[\"categories\"][0] }}"
+            },
+            {
+              "name": "Country",
+              "value": "={{ $json[\"categories\"][1] }}"
+            },
+            {
+              "name": "Model",
+              "value": "={{ $json[\"categories\"][2] }}"
+            },
+            {
+              "name": "Alert",
+              "value": "={{ $json[\"content\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "379a0f6d-140e-42c2-b6f8-e25786515bc5",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        680,
+        320
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-06T23:22:19.882Z",
+  "versionId": "a26673b3-4649-4844-97dd-045081e92bbe"
+}
