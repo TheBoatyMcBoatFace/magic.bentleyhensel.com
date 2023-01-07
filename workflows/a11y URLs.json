@@ -1,0 +1,265 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Rename Keys",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rename Keys": {
+      "main": [
+        [
+          {
+            "node": "Blank email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Blank email": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Postgres",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Update Postgres",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-07T07:56:23.201Z",
+  "id": "9",
+  "name": "a11y URLs",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "5530b68f-070b-41b2-9b17-b53d04f0fc86",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        100,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/11YVFw35aWpwKG0nKMSnyDEckOd8cs6FLB17Fg6Anhww/edit#gid=485474381",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 485474381,
+          "mode": "list",
+          "cachedResultName": "All .gov domains - current-full",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11YVFw35aWpwKG0nKMSnyDEckOd8cs6FLB17Fg6Anhww/edit#gid=485474381"
+        },
+        "options": {}
+      },
+      "id": "a547b290-0b81-43a0-93f0-5419747f7cdb",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        320,
+        240
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keys": {
+          "key": [
+            {
+              "currentKey": "Domain Name",
+              "newKey": "domain"
+            },
+            {
+              "currentKey": "Domain Type",
+              "newKey": "domain_type"
+            },
+            {
+              "currentKey": "Agency",
+              "newKey": "agency"
+            },
+            {
+              "currentKey": "Organization",
+              "newKey": "organization"
+            },
+            {
+              "currentKey": "City",
+              "newKey": "city"
+            },
+            {
+              "currentKey": "State",
+              "newKey": "state"
+            },
+            {
+              "currentKey": "Security Contact Email",
+              "newKey": "security_contact_email"
+            }
+          ]
+        },
+        "additionalOptions": {}
+      },
+      "id": "008d14f5-da98-4fe6-bb52-bd0568b6324b",
+      "name": "Rename Keys",
+      "type": "n8n-nodes-base.renameKeys",
+      "typeVersion": 1,
+      "position": [
+        540,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"security_contact_email\"] }}",
+              "operation": "contains",
+              "value2": "(blank)"
+            }
+          ]
+        }
+      },
+      "id": "da9500b2-c7c5-47a2-991a-862d2787390c",
+      "name": "Blank email",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        760,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "security_contact_email"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "854cf3d5-b1bd-44bc-8acc-a391516a8168",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "schema": "a11y",
+        "table": "domains_gov",
+        "columns": "domain,domain_type,agency,organization,city,state,security_contact_email",
+        "additionalFields": {}
+      },
+      "id": "a9a5617a-523d-406b-a715-58b9e5b822ca",
+      "name": "Postgres1",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        40
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": "a11y",
+        "table": "domains_gov",
+        "updateKey": "domain",
+        "columns": "domain_type,agency,organization,city,state,security_contact_email",
+        "additionalFields": {}
+      },
+      "id": "1cab3c2f-c854-4169-ace3-3173396c8006",
+      "name": "Update Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1440,
+        380
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-07T09:19:32.762Z",
+  "versionId": "1d92a4ae-2b0b-4733-89b0-8aa0dc204ab7"
+}
