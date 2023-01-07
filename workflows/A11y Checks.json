@@ -1,5 +1,5 @@
 {
-  "active": false,
+  "active": true,
   "connections": {
     "When clicking \"Execute Workflow\"": {
       "main": [
@@ -131,7 +131,7 @@
       "main": [
         [
           {
-            "node": "Get Domains",
+            "node": "Execute Workflow",
             "type": "main",
             "index": 0
           }
@@ -171,7 +171,7 @@
       "main": [
         [
           {
-            "node": "Login",
+            "node": "Execute Workflow1",
             "type": "main",
             "index": 0
           }
@@ -206,6 +206,50 @@
           }
         ]
       ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Did this workflow error?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Did this workflow error?": {
+      "main": [
+        [
+          {
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow1": {
+      "main": [
+        [
+          {
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2023-01-07T08:12:57.222Z",
@@ -219,8 +263,8 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        -240,
-        520
+        -380,
+        660
       ]
     },
     {
@@ -253,7 +297,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT domain FROM a11y.domains_gov WHERE (scanned_at < NOW() - INTERVAL '20 hours' OR scanned_at IS NULL) AND (scan_error_at < NOW() - INTERVAL '20 hours' OR scan_error_at IS NULL) ORDER BY RANDOM() LIMIT 1;",
+        "query": "SELECT domain FROM a11y.domains_gov WHERE (scanned_at < NOW() - INTERVAL '16 hours' OR scanned_at IS NULL) AND (scan_error_at < NOW() - INTERVAL '16 hours' OR scan_error_at IS NULL) ORDER BY RANDOM() LIMIT 1;",
         "additionalFields": {}
       },
       "id": "02008f99-a0a3-4371-89f9-917413abdd3c",
@@ -632,13 +676,74 @@
         1580,
         420
       ]
+    },
+    {
+      "parameters": {},
+      "id": "b5d02701-4679-411f-8222-962b456677ac",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"workflow\"][\"id\"] }}",
+              "value2": "10"
+            }
+          ]
+        }
+      },
+      "id": "0fc91fb7-f705-4471-97c7-f2a9c6fb3d31",
+      "name": "Did this workflow error?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "13"
+      },
+      "id": "92860b94-f755-43b4-ab46-ae53f5951b86",
+      "name": "Execute Workflow",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        3060,
+        1080
+      ]
+    },
+    {
+      "parameters": {
+        "workflowId": "13"
+      },
+      "id": "9b0e11b9-4fed-45c3-b5a4-c16e4379dcff",
+      "name": "Execute Workflow1",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        940
+      ]
     }
   ],
   "pinData": {},
   "settings": {},
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrencyRules": []
+    }
+  },
   "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2023-01-07T11:17:49.254Z",
-  "versionId": "d5f74007-4075-4dd2-b8a4-73dfe8c42955"
+  "triggerCount": 1,
+  "updatedAt": "2023-01-07T13:46:11.206Z",
+  "versionId": "27a7cd11-e1da-4483-9179-5b6eaaac6dd5"
 }
