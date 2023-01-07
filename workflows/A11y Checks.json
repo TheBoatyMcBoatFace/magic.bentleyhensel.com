@@ -1,0 +1,586 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login": {
+      "main": [
+        [
+          {
+            "node": "Get Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scan": {
+      "main": [
+        [
+          {
+            "node": "Did Scan Pass?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rename Keys": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Record Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record Scan": {
+      "main": [
+        [
+          {
+            "node": "Rename Scan ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "Rename Type Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rename Scan ID": {
+      "main": [
+        [
+          {
+            "node": "Merge Issues & Scan ID",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Issues & Scan ID": {
+      "main": [
+        [
+          {
+            "node": "Insert Issues",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rename Type Code": {
+      "main": [
+        [
+          {
+            "node": "Merge Issues & Scan ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Domains": {
+      "main": [
+        [
+          {
+            "node": "Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Issues": {
+      "main": [
+        [
+          {
+            "node": "Update Domain Checked At",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Domain Checked At": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Did Scan Pass?": {
+      "main": [
+        [
+          {
+            "node": "Rename Keys",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Failure Vars",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Failure Vars": {
+      "main": [
+        [
+          {
+            "node": "Record Scan Errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Record Scan Errors": {
+      "main": [
+        [
+          {
+            "node": "Get Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-07T08:12:57.222Z",
+  "id": "10",
+  "name": "A11y Checks",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "f2738e06-436b-46cd-a1f9-f2ca27cffbd9",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://a11yapi.bentleyhensel.com/api/login",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{ \"email\": \"bentleyhensel@gmail.com\", \"password\": \"Pecans2020!\" }",
+        "options": {}
+      },
+      "id": "142d128c-c046-4bdf-bc02-04f2a67939aa",
+      "name": "Login",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        120,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT domain\nFROM a11y.domains_gov\nWHERE scanned_at < NOW() - INTERVAL '20 hours' OR scanned_at IS NULL\nLIMIT 1;",
+        "additionalFields": {}
+      },
+      "id": "02008f99-a0a3-4371-89f9-917413abdd3c",
+      "name": "Get Domains",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        380,
+        520
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://a11yapi.bentleyhensel.com/api/scan",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"url\": \"https://ABINGTONMA.GOV\",\n\"pageInsights\": true }",
+        "options": {}
+      },
+      "id": "edd8e488-3cbc-4f2e-a02b-8c39f8050781",
+      "name": "Scan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        600,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "keys": {
+          "key": [
+            {
+              "currentKey": "data.domain",
+              "newKey": "domain"
+            },
+            {
+              "currentKey": "data.url",
+              "newKey": "url"
+            },
+            {
+              "currentKey": "data.pageLoadTime.duration",
+              "newKey": "page_load_time"
+            },
+            {
+              "currentKey": "data.issues",
+              "newKey": "issues"
+            },
+            {
+              "currentKey": "data.issuesInfo",
+              "newKey": "issues_info"
+            },
+            {
+              "currentKey": "data.lastScanDate",
+              "newKey": "last_scan_date"
+            },
+            {
+              "currentKey": "data.lastScanDate",
+              "newKey": "scanned_at"
+            },
+            {
+              "currentKey": "data.online",
+              "newKey": "online"
+            },
+            {
+              "currentKey": "data.pageLoadTime.color",
+              "newKey": "page_load_time_color"
+            },
+            {
+              "currentKey": "data.issuesInfo.possibleIssuesFixedByCdn",
+              "newKey": "possible_issues_fixed_by_cdn"
+            },
+            {
+              "currentKey": "data.issuesInfo.totalIssues",
+              "newKey": "total_issues"
+            },
+            {
+              "currentKey": "data.issuesInfo.issuesFixedByCdn",
+              "newKey": "issues_fixed_by_cdn"
+            },
+            {
+              "currentKey": "data.issuesInfo.errorCount",
+              "newKey": "error_count"
+            },
+            {
+              "currentKey": "data.issuesInfo.warningCount",
+              "newKey": "warning_count"
+            },
+            {
+              "currentKey": "data.issuesInfo.noticeCount",
+              "newKey": "notice_count"
+            },
+            {
+              "currentKey": "data.issuesInfo.adaScore",
+              "newKey": "ada_score"
+            },
+            {
+              "currentKey": "data.issuesInfo.issueMeta.skipContentIncluded",
+              "newKey": "skip_content_included"
+            }
+          ]
+        },
+        "additionalOptions": {}
+      },
+      "id": "07ef6627-de3e-431e-8d6c-2577cb4ab6e2",
+      "name": "Rename Keys",
+      "type": "n8n-nodes-base.renameKeys",
+      "typeVersion": 1,
+      "position": [
+        1320,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "issues",
+        "options": {}
+      },
+      "id": "7e73211f-08a0-4415-a6ef-29f5bab1bde1",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "schema": "a11y",
+        "table": "scans",
+        "columns": "domain,scanned_at,success,code,url,page_load_time,page_load_time_color,possible_issues_fixed_by_cdn,total_issues,issues_fixed_by_cdn,error_count,warning_count,notice_count,ada_score,skip_content_included,online",
+        "returnFields": "id,domain,scanned_at",
+        "additionalFields": {}
+      },
+      "id": "8fc3c3b5-dea2-4cbb-85a8-50301d651948",
+      "name": "Record Scan",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        680
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keys": {
+          "key": [
+            {
+              "currentKey": "id",
+              "newKey": "scan_id"
+            }
+          ]
+        },
+        "additionalOptions": {}
+      },
+      "id": "24a2b745-2a05-4ab9-837b-b8843835cddb",
+      "name": "Rename Scan ID",
+      "type": "n8n-nodes-base.renameKeys",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "multiplex",
+        "options": {}
+      },
+      "id": "4e321d87-69c5-49eb-9623-6813c9259396",
+      "name": "Merge Issues & Scan ID",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        2080,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "keys": {
+          "key": [
+            {
+              "currentKey": "typeCode",
+              "newKey": "type_code"
+            }
+          ]
+        },
+        "additionalOptions": {}
+      },
+      "id": "d3d3e110-a586-48db-b4e9-d8f71c10dcbd",
+      "name": "Rename Type Code",
+      "type": "n8n-nodes-base.renameKeys",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "schema": "a11y",
+        "table": "issues",
+        "columns": "scan_id,code,type,type_code,message,context,selector,runner,recurrence,domain",
+        "returnFields": "scan_id,domain",
+        "additionalFields": {}
+      },
+      "id": "e869caab-82c9-4a35-b702-c5fc008a3e30",
+      "name": "Insert Issues",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        2320,
+        560
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "7b19a38e-f9ff-4f0a-9782-a4ca4f187de3",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2760,
+        720
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": "a11y",
+        "table": "domains_gov",
+        "updateKey": "domain",
+        "columns": "scanned_at",
+        "returnFields": "id",
+        "additionalFields": {}
+      },
+      "id": "e15dbec0-eab4-44ee-a7af-daf493206e0e",
+      "name": "Update Domain Checked At",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        2520,
+        680
+      ],
+      "executeOnce": true,
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json[\"code\"] }}",
+              "operation": "equal",
+              "value2": 200
+            }
+          ]
+        }
+      },
+      "id": "9fa2517b-d369-4d55-abc8-517201c813d4",
+      "name": "Did Scan Pass?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        840,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "number": [
+            {
+              "name": "domain",
+              "value": "={{ $node[\"Get Domains\"].json[\"domain\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d358f12b-12b1-4a7b-b65a-7aa5d3ca7527",
+      "name": "Set Failure Vars",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE a11y.domains_gov SET scan_error_at = NOW(),     scan_error = $2 WHERE domain = $1 RETURNING domain;",
+        "additionalFields": {
+          "queryParams": "domain,scan_error"
+        }
+      },
+      "id": "7c5e621a-7163-43fb-89eb-fcf4460908f5",
+      "name": "Record Scan Errors",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        960
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-07T09:58:05.789Z",
+  "versionId": "dc948760-9c94-43a9-965c-ea5771aff849"
+}
