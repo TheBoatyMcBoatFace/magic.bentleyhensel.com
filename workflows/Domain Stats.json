@@ -1,0 +1,60 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Domains per Hour",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-07T11:12:41.329Z",
+  "id": "12",
+  "name": "Domain Stats",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "bd5fcc0b-e827-450f-be5b-56088ff5d8e6",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        300,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH total_checked AS (   SELECT COUNT(*) AS count   FROM a11y.domains_gov   WHERE scanned_at IS NOT NULL ), elapsed_hours AS (   SELECT (EXTRACT(EPOCH FROM NOW()) - EXTRACT(EPOCH FROM MIN(scanned_at))) / 3600.0 AS hours   FROM a11y.domains_gov   WHERE scanned_at IS NOT NULL ) SELECT ROUND(AVG(total_checked.count / elapsed_hours.hours)) AS \"Domains per Hour\" FROM total_checked, elapsed_hours;",
+        "additionalFields": {}
+      },
+      "id": "b74d36e7-1cd3-4d6c-9fbe-e99d5876d140",
+      "name": "Domains per Hour",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        600,
+        360
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-07T11:15:44.589Z",
+  "versionId": "217c3710-6ece-44c8-b545-1a0a7ec84d6b"
+}
