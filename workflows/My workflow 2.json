@@ -1,0 +1,52 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Google BigQuery",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-08T01:33:23.492Z",
+  "id": "14",
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "f2db2a12-6d5d-4262-ad70-77c86271e940",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        680,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "6976051c-85f1-4733-b6a5-c5f8dc09ad88",
+      "name": "Google BigQuery",
+      "type": "n8n-nodes-base.googleBigQuery",
+      "typeVersion": 1,
+      "position": [
+        900,
+        360
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-08T01:33:23.492Z",
+  "versionId": "841757c3-b236-4cf5-a6b0-1f0681c8a988"
+}
