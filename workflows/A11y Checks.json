@@ -171,7 +171,7 @@
       "main": [
         [
           {
-            "node": "Execute Workflow1",
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
@@ -245,6 +245,17 @@
         [
           {
             "node": "Login",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow1",
             "type": "main",
             "index": 0
           }
@@ -440,7 +451,7 @@
       "type": "n8n-nodes-base.itemLists",
       "typeVersion": 1,
       "position": [
-        1840,
+        2060,
         300
       ],
       "continueOnFail": true
@@ -458,7 +469,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
       "position": [
-        1760,
+        1980,
         680
       ],
       "credentials": {
@@ -485,7 +496,7 @@
       "type": "n8n-nodes-base.renameKeys",
       "typeVersion": 1,
       "position": [
-        1980,
+        2200,
         680
       ]
     },
@@ -500,7 +511,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 2,
       "position": [
-        2380,
+        2600,
         520
       ]
     },
@@ -521,7 +532,7 @@
       "type": "n8n-nodes-base.renameKeys",
       "typeVersion": 1,
       "position": [
-        2100,
+        2320,
         300
       ]
     },
@@ -538,7 +549,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
       "position": [
-        2660,
+        2880,
         620
       ],
       "credentials": {
@@ -563,7 +574,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 1,
       "position": [
-        2840,
+        3060,
         960
       ],
       "executeOnce": true,
@@ -676,7 +687,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [
-        1580,
+        1800,
         420
       ]
     },
@@ -720,8 +731,8 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        3060,
-        1080
+        3400,
+        1100
       ]
     },
     {
@@ -733,9 +744,24 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1,
       "position": [
-        1840,
-        940
+        2180,
+        960
       ]
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "seconds"
+      },
+      "id": "4396269b-4eed-44de-9a62-18fd618c4f0b",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1780,
+        880
+      ],
+      "webhookId": "1ebdcf88-acba-4cd9-9328-79ca9f0df944"
     }
   ],
   "pinData": {},
@@ -747,6 +773,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2023-01-08T09:59:16.567Z",
-  "versionId": "4c735e03-6ba0-4739-8b8a-020b3706a46b"
+  "updatedAt": "2023-01-08T10:01:30.980Z",
+  "versionId": "dd6585b8-c8d8-4783-9630-9246f2103bdf"
 }
