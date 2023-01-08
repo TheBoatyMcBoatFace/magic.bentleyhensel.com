@@ -297,7 +297,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": "SELECT domain FROM a11y.domains_gov WHERE (scanned_at < NOW() - INTERVAL '16 hours' OR scanned_at IS NULL) AND (scan_error_at < NOW() - INTERVAL '16 hours' OR scan_error_at IS NULL) ORDER BY RANDOM() LIMIT 1;",
+        "query": "SELECT domain FROM a11y.domains_gov WHERE (scanned_at < NOW() - INTERVAL '10 hours' OR scanned_at IS NULL) AND (scan_error_at < NOW() - INTERVAL '10 hours' OR scan_error_at IS NULL) ORDER BY RANDOM() LIMIT 1;",
         "additionalFields": {}
       },
       "id": "02008f99-a0a3-4371-89f9-917413abdd3c",
@@ -331,7 +331,9 @@
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={ \"url\": \"https://{{ $json[\"domain\"] }}\",\n\"pageInsights\": true }",
-        "options": {}
+        "options": {
+          "timeout": 15000
+        }
       },
       "id": "edd8e488-3cbc-4f2e-a02b-8c39f8050781",
       "name": "Scan",
@@ -340,7 +342,8 @@
       "position": [
         600,
         520
-      ]
+      ],
+      "continueOnFail": true
     },
     {
       "parameters": {
@@ -642,8 +645,8 @@
         "rule": {
           "interval": [
             {
-              "field": "hours",
-              "hoursInterval": 18
+              "field": "minutes",
+              "minutesInterval": 30
             }
           ]
         }
@@ -744,6 +747,6 @@
   },
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2023-01-07T13:46:11.206Z",
-  "versionId": "27a7cd11-e1da-4483-9179-5b6eaaac6dd5"
+  "updatedAt": "2023-01-08T09:59:16.567Z",
+  "versionId": "4c735e03-6ba0-4739-8b8a-020b3706a46b"
 }
