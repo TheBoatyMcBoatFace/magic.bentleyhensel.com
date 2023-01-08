@@ -1,0 +1,59 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-08T09:22:24.937Z",
+  "id": "15",
+  "name": "MongoDB",
+  "nodes": [
+    {
+      "parameters": {
+        "collection": "Websites",
+        "options": {}
+      },
+      "id": "fdc6aa3e-8e33-4b3b-907d-372733228b11",
+      "name": "MongoDB",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        700
+      ],
+      "credentials": {
+        "mongoDb": {
+          "id": "8",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "1a4ae3d8-89e0-49a3-a24a-10ffdf8b235f",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        1420,
+        700
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-08T09:51:34.387Z",
+  "versionId": "25f6c1e9-b52a-4754-8fea-b84ba33ad2c9"
+}
