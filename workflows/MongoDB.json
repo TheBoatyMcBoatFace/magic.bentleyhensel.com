@@ -19,7 +19,7 @@
   "nodes": [
     {
       "parameters": {
-        "collection": "Websites",
+        "collection": "Pages",
         "options": {}
       },
       "id": "fdc6aa3e-8e33-4b3b-907d-372733228b11",
@@ -54,6 +54,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2023-01-08T09:51:34.387Z",
-  "versionId": "25f6c1e9-b52a-4754-8fea-b84ba33ad2c9"
+  "updatedAt": "2023-01-08T10:05:52.579Z",
+  "versionId": "6cbbc6e8-9791-4f17-bbe4-c0f84eea07ee"
 }
