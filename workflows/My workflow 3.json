@@ -1,0 +1,345 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Raw",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spreadsheet File": {
+      "main": [
+        [
+          {
+            "node": "Rename Keys1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rename Keys1": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub": {
+      "main": [
+        [
+          {
+            "node": "Spreadsheet File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Imported?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Raw": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Imported?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-08T10:06:35.262Z",
+  "id": "16",
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "2c905df0-32d2-4b50-b559-2b43057bd860",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        100,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1Q799XBbS-dpMFBUMVvFhamHivGRWPD-1tUkeEMcfBqM/edit#gid=0",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Q799XBbS-dpMFBUMVvFhamHivGRWPD-1tUkeEMcfBqM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "d60df8a5-e24f-4c97-830d-049be7e6ffb6",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        320,
+        440
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "headerRow": true
+        }
+      },
+      "id": "5057de18-95fe-4495-9980-acb17ed3cc7e",
+      "name": "Spreadsheet File",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO a11y.domains (domain_name, domain_type, agency, organization, city, state, security_contact_email)\nVALUES ($1, $2, $3, $4, $5, $6, $7 )\nON CONFLICT (domain_name) DO NOTHING;",
+        "additionalFields": {
+          "queryParams": "domain_name, domain_type, agency, organization, city, state, security_contact_email"
+        }
+      },
+      "id": "e6382fe8-cc1a-4793-9b8a-dd27b5ebf424",
+      "name": "Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        2180,
+        360
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keys": {
+          "key": [
+            {
+              "currentKey": "Domain Name",
+              "newKey": "domain_name"
+            },
+            {
+              "currentKey": "Domain Type",
+              "newKey": "domain_type"
+            },
+            {
+              "currentKey": "Agency",
+              "newKey": "agency"
+            },
+            {
+              "currentKey": "Organization",
+              "newKey": "organization"
+            },
+            {
+              "currentKey": "City",
+              "newKey": "city"
+            },
+            {
+              "currentKey": "State",
+              "newKey": "state"
+            },
+            {
+              "currentKey": "Security Contact Email",
+              "newKey": "security_contact_email"
+            }
+          ]
+        },
+        "additionalOptions": {}
+      },
+      "id": "f6335494-e2fd-44da-be71-b5dd5fb2c66c",
+      "name": "Rename Keys1",
+      "type": "n8n-nodes-base.renameKeys",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "47c431d5-819a-4201-be01-01c5b0feeba4",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": "={{ $json[\"Repo Owner\"] }}",
+        "repository": "={{ $json[\"Repo Name\"] }}",
+        "filePath": "={{ $json[\"File Directory\"] }}",
+        "additionalParameters": {
+          "reference": "main"
+        }
+      },
+      "id": "d0217424-eef2-45a5-a676-012fc756e94d",
+      "name": "GitHub",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        360
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "2",
+          "name": "@TheBoatyMcBoatFace"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"Imported\"] }}",
+              "value2": "x"
+            }
+          ]
+        }
+      },
+      "id": "4346abc6-2ce6-4695-b6d7-80652005f45e",
+      "name": "Is Imported?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        780,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json[\"URL\"] }}",
+        "options": {}
+      },
+      "id": "60d13448-784e-43d9-a977-1455f0f19bd8",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        840,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"Imported\"] }}",
+              "value2": "Raw"
+            }
+          ]
+        }
+      },
+      "id": "8e1c4b92-dfc7-4bac-9581-43b7f1f90281",
+      "name": "Raw",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        520,
+        440
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-08T10:46:53.248Z",
+  "versionId": "f0e83310-221c-423d-8846-3bfa3bdb5886"
+}
