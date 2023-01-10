@@ -1,0 +1,241 @@
+{
+  "active": false,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Current Federal",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Current Full",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Current Federal": {
+      "main": [
+        [
+          {
+            "node": "Federal to CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Current Full": {
+      "main": [
+        [
+          {
+            "node": "Full to CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Federal to CSV": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Full to CSV": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Clean Contact Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-10T05:24:47.213Z",
+  "id": "17",
+  "name": "Get Gov Domains",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "14fe3ba4-ba00-4272-a294-2018667a994d",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        320,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://domains.dotgov.gov/dotgov-web/publicreports/current-federal",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "current-federal"
+            }
+          }
+        }
+      },
+      "id": "fdfc293a-f749-4aac-b3ce-77231a1383bf",
+      "name": "Get Current Federal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        620,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://domains.dotgov.gov/dotgov-web/publicreports/current-full",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "current-full"
+            }
+          }
+        }
+      },
+      "id": "9776dcfd-b254-4b0b-aacb-82b16b4db9a2",
+      "name": "Get Current Full",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        620,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "current-full",
+        "options": {
+          "headerRow": true
+        }
+      },
+      "id": "e1bc0be9-7e3a-463d-acf2-ce46f7d2c15b",
+      "name": "Full to CSV",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1,
+      "position": [
+        900,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "binaryPropertyName": "current-federal",
+        "options": {
+          "headerRow": true
+        }
+      },
+      "id": "ebfbbf55-59c4-4496-a68a-9eb191762115",
+      "name": "Federal to CSV",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1,
+      "position": [
+        900,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "domain_name",
+              "value": "={{ $json[\"Domain Name\"] }}"
+            },
+            {
+              "name": "domain_type",
+              "value": "={{ $json[\"Domain Type\"] }}"
+            },
+            {
+              "name": "agency",
+              "value": "={{ $json[\"Agency\"] }}"
+            },
+            {
+              "name": "organization",
+              "value": "={{ $json[\"Organization\"] }}"
+            },
+            {
+              "name": "city",
+              "value": "={{ $json[\"City\"] }}"
+            },
+            {
+              "name": "state",
+              "value": "={{ $json[\"State\"] }}"
+            },
+            {
+              "name": "security_contact_email",
+              "value": "={{ $json[\"Security Contact Email\"] }}"
+            }
+          ],
+          "boolean": [
+            {
+              "name": "active",
+              "value": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "44042f38-b9b1-41d5-b1c1-18b3fa29c450",
+      "name": "Clean Contact Emails",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1420,
+        440
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "5c2d69f9-598e-4d52-bc2f-4022a498e245",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        440
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-10T05:39:59.467Z",
+  "versionId": "372adbe0-453f-4b39-a19a-802f55ce0d6a"
+}
