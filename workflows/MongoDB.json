@@ -44,7 +44,7 @@
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
       "position": [
-        1420,
+        1580,
         700
       ]
     }
@@ -54,6 +54,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2023-01-08T10:05:52.579Z",
-  "versionId": "6cbbc6e8-9791-4f17-bbe4-c0f84eea07ee"
+  "updatedAt": "2023-01-10T02:27:23.232Z",
+  "versionId": "bff03a21-396d-4f4e-8b7c-6721dcb356df"
 }
