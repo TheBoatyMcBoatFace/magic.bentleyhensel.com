@@ -1,0 +1,637 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Is Imported?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Spreadsheet File": {
+      "main": [
+        [
+          {
+            "node": "Rename Keys1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rename Keys1": {
+      "main": [
+        [
+          {
+            "node": "IF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "GitHub",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GitHub": {
+      "main": [
+        [
+          {
+            "node": "Spreadsheet File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Imported?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Split In Batches1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        []
+      ]
+    },
+    "IF": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GitHub1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "no-header": {
+      "main": [
+        []
+      ]
+    },
+    "Spreadsheet File1": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "Set1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-08T10:06:35.262Z",
+  "id": "16",
+  "name": "Github Domains - dev",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "2c905df0-32d2-4b50-b559-2b43057bd860",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1Q799XBbS-dpMFBUMVvFhamHivGRWPD-1tUkeEMcfBqM/edit#gid=0",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Q799XBbS-dpMFBUMVvFhamHivGRWPD-1tUkeEMcfBqM/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "d60df8a5-e24f-4c97-830d-049be7e6ffb6",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        320,
+        440
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "headerRow": true
+        }
+      },
+      "id": "5057de18-95fe-4495-9980-acb17ed3cc7e",
+      "name": "Spreadsheet File",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1,
+      "position": [
+        1860,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO a11y.domains (domain_name, domain_type, agency, organization, city, state, security_contact_email)\nVALUES ($1, $2, $3, $4, $5, $6, $7 )\nON CONFLICT (domain_name) DO NOTHING;",
+        "additionalFields": {
+          "queryParams": "domain_name, domain_type, agency, organization, city, state, security_contact_email"
+        }
+      },
+      "id": "e6382fe8-cc1a-4793-9b8a-dd27b5ebf424",
+      "name": "Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        2620,
+        360
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "keys": {
+          "key": [
+            {
+              "currentKey": "Domain Name",
+              "newKey": "domain_name"
+            },
+            {
+              "currentKey": "Domain Type",
+              "newKey": "domain_type"
+            },
+            {
+              "currentKey": "Agency",
+              "newKey": "agency"
+            },
+            {
+              "currentKey": "Organization",
+              "newKey": "organization"
+            },
+            {
+              "currentKey": "City",
+              "newKey": "city"
+            },
+            {
+              "currentKey": "State",
+              "newKey": "state"
+            },
+            {
+              "currentKey": "Security Contact Email",
+              "newKey": "security_contact_email"
+            }
+          ]
+        },
+        "additionalOptions": {}
+      },
+      "id": "f6335494-e2fd-44da-be71-b5dd5fb2c66c",
+      "name": "Rename Keys1",
+      "type": "n8n-nodes-base.renameKeys",
+      "typeVersion": 1,
+      "position": [
+        2140,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "47c431d5-819a-4201-be01-01c5b0feeba4",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": "={{ $json[\"Repo Owner\"] }}",
+        "repository": "={{ $json[\"Repo Name\"] }}",
+        "filePath": "={{ $json[\"File Directory\"] }}",
+        "additionalParameters": {
+          "reference": "main"
+        }
+      },
+      "id": "d0217424-eef2-45a5-a676-012fc756e94d",
+      "name": "GitHub",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        360
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "2",
+          "name": "@TheBoatyMcBoatFace"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"Imported\"] }}",
+              "value2": "x"
+            },
+            {
+              "value1": "={{ $json[\"Imported\"] }}",
+              "value2": "pause"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "4346abc6-2ce6-4695-b6d7-80652005f45e",
+      "name": "Is Imported?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        360,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json[\"URL\"] }}",
+        "options": {}
+      },
+      "id": "60d13448-784e-43d9-a977-1455f0f19bd8",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1160,
+        560
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "16653b59-b857-4a12-9724-3eb63a5516ad",
+      "name": "IF",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2360,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json[\"Imported\"] }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "Raw"
+            },
+            {
+              "value2": "no-header",
+              "output": 1
+            },
+            {
+              "value2": "2",
+              "output": 3
+            }
+          ]
+        }
+      },
+      "id": "bfc558cf-ab5e-4cbf-93f3-36e908137a13",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        820,
+        920
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://raw.githubusercontent.com/cisagov/dotgov-data/main/dotgov-websites/pulse-subdomains-snapshot-06-08-2020-https.json",
+        "options": {}
+      },
+      "id": "2249b34d-b337-4d52-8d7f-97ff8e641471",
+      "name": "no-header",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        400,
+        1280
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "headerRow": false
+        }
+      },
+      "id": "3489d77c-93b6-4a09-b898-0223713c9aa5",
+      "name": "Spreadsheet File1",
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1,
+      "position": [
+        1700,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "domain_name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "283e9cb3-ce3b-4823-91b9-ffe61f513523",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        2000,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "840ca2b0-b49d-4e8d-a91c-ad1f6b592d9a",
+      "name": "Split In Batches1",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        580,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "domain_name",
+              "value": "={{ $json[\"data\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b6639519-0624-438a-8340-e27e32b33a24",
+      "name": "Set1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1780,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "id": "81f2c74e-46f6-4388-bcb3-364b735e52ed",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "aggregateItems",
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2cf0d503-62a5-49b8-8333-d1a01d434256",
+      "name": "Item Lists1",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        1480,
+        1020
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": "={{ $json[\"Repo Owner\"] }}",
+        "repository": "={{ $json[\"Repo Name\"] }}",
+        "filePath": "={{ $json[\"File Directory\"] }}",
+        "additionalParameters": {
+          "reference": "main"
+        }
+      },
+      "id": "c3b4d836-1f29-4a96-8737-c6429728be5c",
+      "name": "GitHub1",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        880,
+        620
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "2",
+          "name": "@TheBoatyMcBoatFace"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1Q799XBbS-dpMFBUMVvFhamHivGRWPD-1tUkeEMcfBqM/edit#gid=0",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1916135902,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Q799XBbS-dpMFBUMVvFhamHivGRWPD-1tUkeEMcfBqM/edit#gid=1916135902"
+        },
+        "options": {}
+      },
+      "id": "47676ee6-9f62-4d0b-bb2f-e8805efdaf5e",
+      "name": "Google Sheets1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        220,
+        1040
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7",
+          "name": "Bentley.Hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO a11y.domains (domain_name, domain_type, agency, organization, city, state, security_contact_email, source)\nVALUES ($1, $2, $3, $4, $5, $6, $7, $8 )\nON CONFLICT (domain_name) DO NOTHING;",
+        "additionalFields": {
+          "queryParams": "domain_name, domain_type, agency, organization, city, state, security_contact_email, source"
+        }
+      },
+      "id": "0c2fb7e0-1fcd-4042-a242-95da1e7d140f",
+      "name": "Postgres1",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        1060,
+        1180
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "3",
+          "name": "PostyTheGres: Gates of the Arctic"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-10T02:55:02.478Z",
+  "versionId": "7193fe98-432f-473c-b842-c0bc740c8567"
+}
