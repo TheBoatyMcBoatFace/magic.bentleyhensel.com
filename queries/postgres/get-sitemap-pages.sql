@@ -3,4 +3,4 @@ sitemap_id,
 priority,
 change_frequency
 FROM a11y.sitemap_pages sp
-WHERE url ILIKE '%$1%';
+WHERE url ILIKE '%cms.gov%';
