@@ -1,0 +1,327 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Get Techs from Wappalyzer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Techs from Wappalyzer": {
+      "main": [
+        [
+          {
+            "node": "Not _",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Split In Batches1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Not _": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Set1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set1": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-18T05:44:16.090Z",
+  "id": "3",
+  "name": "Join Json",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "f6cedbef-05ca-40b3-af26-38095939d8da",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -260,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "list",
+        "owner": "wappalyzer",
+        "repository": "wappalyzer",
+        "filePath": "src/technologies/"
+      },
+      "id": "40679d7e-5fc0-4d4e-a958-dae680f4710a",
+      "name": "Get Techs from Wappalyzer",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        -220,
+        1440
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "4",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/wappalyzer/wappalyzer/master/src/technologies/a.json",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "a45a17e2-f7ba-4f80-a6e2-5074129b430e",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        480,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "04b797e0-3f0d-4823-b537-593d515ffbbb",
+      "name": "Split In Batches1",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        280,
+        1340
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "multiplex",
+        "options": {}
+      },
+      "id": "f400b176-f8f8-47c3-b2ef-000c855cedec",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        880,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/wappalyzer/wappalyzer/master/src/technologies/b.json",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "4d73c20e-3ff3-4a2a-831c-ed7876df3308",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        460,
+        980
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json[\"download_url\"] }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "ad7b17f1-4c2b-44cc-a9ee-fce89f3287b2",
+      "name": "HTTP Request2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        540,
+        1340
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"path\"] }}",
+              "operation": "notEqual",
+              "value2": "src/technologies/_.json"
+            }
+          ]
+        }
+      },
+      "id": "9b09aa99-84ae-466e-8bee-d6d5e946d3ea",
+      "name": "Not _",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        0,
+        1440
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "multiplex",
+        "options": {}
+      },
+      "id": "88aeee00-6b09-4238-83fa-6629c11be799",
+      "name": "Merge3",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        840,
+        1400
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "data",
+              "value": "={{ $json[\"data\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2c093e67-281d-44f4-a947-54e22d5a8537",
+      "name": "Set1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1300,
+        1440
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "8da0e434-ef60-434c-94a6-1f107150031d",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1540,
+        1780
+      ],
+      "executeOnce": true
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-18T06:55:58.958Z",
+  "versionId": "dbbdf4ea-2101-420c-8185-0672ce467f2f"
+}
