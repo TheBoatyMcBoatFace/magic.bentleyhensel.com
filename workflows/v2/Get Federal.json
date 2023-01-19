@@ -1,0 +1,410 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "XML": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "Is Parent?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Parent?": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Is DoD?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is DoD?": {
+      "main": [
+        [
+          {
+            "node": "is dod",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "is not dod",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is dod": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is not dod": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Item Lists1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-19T05:33:59.620Z",
+  "id": "7",
+  "name": "Get Federal",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "dd65f470-a4a7-4076-aab7-7726a4f5d993",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        320,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.opm.gov/about-us/open-government/Data/Apps/agencies/agencies.xml",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "id": "cddf08b2-cd9e-4854-b051-bb01bafc0e55",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        700,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e059a0d6-f955-4231-a58a-005935514e87",
+      "name": "XML",
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 1,
+      "position": [
+        920,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "agencies.agency",
+        "options": {}
+      },
+      "id": "8bd3f671-62e0-4316-b4ee-7e1be7c71927",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"agency_subelement\"] }}",
+              "value2": "={{ $json[\"name\"] }}"
+            }
+          ]
+        }
+      },
+      "id": "9abbea5b-fac6-4c35-ab1e-f1b80828e261",
+      "name": "Is Parent?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "name",
+              "value": "={{ $json[\"name\"] }}"
+            },
+            {
+              "name": "agency_type",
+              "value": "={{ $json[\"type\"] }}"
+            }
+          ],
+          "number": [
+            {
+              "name": "employment",
+              "value": "={{ $json[\"employment\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ce37ea43-706b-4531-bc8a-1661c77623d3",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "name",
+              "value": "={{ $json[\"agency_subelement\"] }}"
+            },
+            {
+              "name": "agency_type",
+              "value": "={{ $json[\"type\"] }}"
+            },
+            {
+              "name": "parent_agency",
+              "value": "={{ $json[\"name\"] }} "
+            }
+          ],
+          "number": [
+            {
+              "name": "employment",
+              "value": "={{ $json[\"employment\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e311c33c-6272-48f2-b5b0-3f225ce3a587",
+      "name": "Set1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1760,
+        420
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "246a7604-b291-4eb8-8ea8-0b00ca76ca5b",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        2020,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"dod_aggregate\"] }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "b0623845-39b0-454b-bcd5-596ed7c9ec92",
+      "name": "Is DoD?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2240,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "boolean": [
+            {
+              "name": "dod",
+              "value": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "90039bfb-f4a3-4395-8bd1-d0e60f4ddb22",
+      "name": "is dod",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        2460,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "boolean": [
+            {
+              "name": "dod"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ef08dc0c-8632-4783-8517-b9878943d0b7",
+      "name": "is not dod",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        420
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "37f99e68-434d-4c40-b4c4-458a301bb4c0",
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        2680,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "removeDuplicates",
+        "compare": "selectedFields",
+        "fieldsToCompare": {
+          "fields": [
+            {
+              "fieldName": "name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1befa66c-e3c4-478e-8f73-12cef22d6b45",
+      "name": "Item Lists1",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        2960,
+        340
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-19T05:52:01.424Z",
+  "versionId": "12b906d7-36d9-4c68-ba9c-e4dde83b8e0e"
+}
