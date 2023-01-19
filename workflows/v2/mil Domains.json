@@ -1,0 +1,522 @@
+{
+  "active": true,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Get Mil Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "A-Z": {
+      "main": [
+        [
+          {
+            "node": "HTML Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Extract": {
+      "main": [
+        [
+          {
+            "node": "HTML Extract1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Mil Domains": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "A-Z",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Extract1": {
+      "main": [
+        [
+          {
+            "node": "HTML Extract3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Extract3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Send to Sheets": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Mil Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Send to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-18T23:56:06.545Z",
+  "id": "5",
+  "name": "mil Domains",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ffef90f6-4d14-435c-bea9-247e82961f9b",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        120,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "sourceData": "binary",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "data",
+              "cssSelector": "#dnn_ctr2126_ModuleContent > article > div > div.DGOVLandingMain > div.DGOVDODWebsitesContainer > div.DGOVWebsitesTabContent > div.DGOVWebsitesLinks",
+              "returnValue": "html",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {
+          "trimValues": true
+        }
+      },
+      "id": "eda63c9a-3eba-4d06-a7d8-a2413d742bc3",
+      "name": "HTML Extract",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        1180,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json[\"url\"] }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "7624c7ad-096a-4e80-ba1c-3db5c66218df",
+      "name": "A-Z",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        920,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "extractionValues": {
+          "values": [
+            {
+              "key": "items",
+              "cssSelector": "div",
+              "returnValue": "html",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "119c4706-fe4b-4ccf-b88f-4517955fc167",
+      "name": "HTML Extract1",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=0",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sources",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "9678ff48-2999-4338-82ec-8f11f1ea2930",
+      "name": "Get Mil Domains",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        380,
+        520
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "3a42994b-f61a-46e7-b99e-88c4588eacde",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        600,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "dataPropertyName": "items",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "url",
+              "cssSelector": "a",
+              "returnValue": "attribute",
+              "attribute": "href"
+            },
+            {
+              "key": "name",
+              "cssSelector": "a",
+              "returnValue": "html"
+            }
+          ]
+        },
+        "options": {
+          "trimValues": true
+        }
+      },
+      "id": "112232bd-94b6-48f1-8a23-a4752f30f5de",
+      "name": "HTML Extract3",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "projectId": "ca-a11y",
+        "datasetId": "public_data",
+        "tableId": "test",
+        "options": {}
+      },
+      "id": "0756624d-5f56-4034-afcc-4dfd759225ab",
+      "name": "Google BigQuery",
+      "type": "n8n-nodes-base.googleBigQuery",
+      "typeVersion": 1,
+      "position": [
+        2020,
+        20
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "5",
+          "name": "CA Cloud"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://www.opm.gov/about-us/open-government/Data/Apps/agencies/agencies.xml",
+        "options": {}
+      },
+      "id": "178811b1-5635-4a1a-9b6c-e6f7c6c0f62b",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1660,
+        80
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "projectId": "ca-a11y",
+        "datasetId": "public_data",
+        "tableId": "test",
+        "options": {
+          "skipInvalidRows": true,
+          "templateSuffix": ""
+        }
+      },
+      "id": "38f41fd9-0028-4c7b-b504-a3beada18560",
+      "name": "Google BigQuery1",
+      "type": "n8n-nodes-base.googleBigQuery",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        260
+      ],
+      "credentials": {
+        "googleApi": {
+          "id": "5",
+          "name": "CA Cloud"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=1243942116",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 605973833,
+          "mode": "list",
+          "cachedResultName": "RAW",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=605973833"
+        },
+        "columnToMatchOn": "url",
+        "valueToMatchOn": "={{ $json[\"url\"] }}",
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "name",
+              "fieldValue": "={{ $json[\"name\"] }}"
+            },
+            {
+              "column": "url_source",
+              "fieldValue": "={{ $json[\"Source\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "8c429a93-9bbd-4a0c-9a81-cf15d0b040d7",
+      "name": "Send to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        2280,
+        540
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "ebaffa79-c244-4df0-9ab5-fa778e758502",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2440,
+        760
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "id": "9df7e14d-cb81-481f-84de-6ab6a3f5047d",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        2660,
+        900
+      ],
+      "webhookId": "abd14722-2681-4b86-a2c2-0d31e6b69584"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtMinute": 15
+            }
+          ]
+        }
+      },
+      "id": "dd484003-a786-46e6-a74d-ba980150f135",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        60,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "url_source",
+              "value": "={{ $json[\"Source\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "265644b5-896b-4df1-b8f7-3fe0e1d8d067",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "multiplex",
+        "options": {}
+      },
+      "id": "b582f571-245e-4a6a-aea9-dcdc839d2cc1",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        1960,
+        460
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrencyRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2023-01-19T06:07:26.924Z",
+  "versionId": "c798802c-b5be-44dc-a45d-4ed7792a2389"
+}
