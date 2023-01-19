@@ -1,0 +1,275 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Vars",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vars": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Write to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write to Sheets": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-18T00:02:09.458Z",
+  "id": "1",
+  "name": "Sitemaps to Sheets",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "e2e89672-b009-458b-81f4-b74af1fd3df4",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "={{ $json[\"query\"] }}",
+        "additionalFields": {}
+      },
+      "id": "dece49b5-360e-4fe1-af10-140931117c08",
+      "name": "Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        960,
+        360
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "1",
+          "name": "Gates of the Arctic (gota)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/TheBoatyMcBoatFace/magic.bentleyhensel.com/main/queries/postgres/get-sitemap-pages.sql",
+        "options": {}
+      },
+      "id": "59462064-8dc2-4bcc-9bf6-d5d08169126d",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        480,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "url",
+              "value": "cms.gov"
+            }
+          ],
+          "number": [
+            {
+              "name": "sheets_batch_size",
+              "value": 1500
+            },
+            {
+              "name": "sheets_wait",
+              "value": 15
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c753cb1a-967a-48dc-8688-10684104e564",
+      "name": "Vars",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        260,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "query",
+              "value": "={{ $json[\"data\"] }}"
+            },
+            {
+              "name": "url",
+              "value": "={{ $node[\"Vars\"].json[\"url\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fbb74691-1d14-4ecd-9bac-730cdbaefc7c",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        700,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": "={{ $node[\"Vars\"].json[\"sheets_batch_size\"] }}",
+        "options": {}
+      },
+      "id": "ba6a3c67-dca0-4602-a2a5-71ea1132f3d3",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        1240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1GiJiWtwN9OtmH8wJH4CiQEUQazk_2Yf07KG4ejnSyZ0",
+          "mode": "list",
+          "cachedResultName": "CMS Sitemaps",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GiJiWtwN9OtmH8wJH4CiQEUQazk_2Yf07KG4ejnSyZ0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1830192259,
+          "mode": "list",
+          "cachedResultName": "Pages",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GiJiWtwN9OtmH8wJH4CiQEUQazk_2Yf07KG4ejnSyZ0/edit#gid=1830192259"
+        },
+        "dataMode": "autoMapInputData",
+        "columnToMatchOn": "url",
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "dae477fc-aa75-4bca-ae71-8a2cfb779c9e",
+      "name": "Write to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        1480,
+        220
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": "={{ $node[\"Vars\"].json[\"sheets_wait\"] }}",
+        "unit": "seconds"
+      },
+      "id": "9821b0bd-d907-45b2-bea2-e0a734f82c6d",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        380
+      ],
+      "webhookId": "db7adc8b-62fe-4225-9fe3-f31e2a429c1f"
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-18T02:29:38.436Z",
+  "versionId": "0d33c06a-01f9-4652-988d-a8189f4adfdc"
+}
