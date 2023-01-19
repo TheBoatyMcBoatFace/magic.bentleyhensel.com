@@ -1,0 +1,96 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-18T03:16:07.674Z",
+  "id": "2",
+  "name": "a11ywatch-scans-to sheets",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "9c180383-af32-4afd-99dc-5cf6d866277f",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        580,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "options": {}
+      },
+      "id": "3d3c29da-1c85-45b0-9467-b57985b7ddba",
+      "name": "Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        800,
+        360
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "3",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1ANNNcEYdrcy_S8AmapBmy_nDX4OtD7M3",
+          "mode": "list",
+          "cachedResultName": "A11yWatch Scans",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1ANNNcEYdrcy_S8AmapBmy_nDX4OtD7M3"
+        },
+        "event": "fileUpdated",
+        "options": {
+          "fileType": "all"
+        }
+      },
+      "id": "d674df2d-006a-4a1b-a53b-6802161c99f2",
+      "name": "Google Drive Trigger",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        600,
+        620
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "3",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-18T05:40:39.086Z",
+  "versionId": "1f6a5f92-1026-482e-ab7e-7ecd3e7f9613"
+}
