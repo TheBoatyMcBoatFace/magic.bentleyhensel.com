@@ -1,0 +1,563 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Get Mil Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "A-Z": {
+      "main": [
+        [
+          {
+            "node": "HTML Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Extract": {
+      "main": [
+        [
+          {
+            "node": "Set2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Mil Domains": {
+      "main": [
+        [
+          {
+            "node": "A-Z",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Extract1": {
+      "main": [
+        [
+          {
+            "node": "HTML Extract3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML Extract3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Mil Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists": {
+      "main": [
+        [
+          {
+            "node": "Move Binary Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move Binary Data": {
+      "main": [
+        [
+          {
+            "node": "GitHub",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "CA Github",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set2": {
+      "main": [
+        [
+          {
+            "node": "HTML Extract1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Cleaned": {
+      "main": [
+        [
+          {
+            "node": "Item Lists1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Set Cleaned",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists1": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-19T07:12:37.195Z",
+  "id": "8",
+  "name": "Mil Domains to Github",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "57cad5b1-ec77-4097-9f5e-b132d43c7a58",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        120,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "sourceData": "binary",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "data",
+              "cssSelector": "#dnn_ctr2126_ModuleContent > article > div > div.DGOVLandingMain > div.DGOVDODWebsitesContainer > div.DGOVWebsitesTabContent > div.DGOVWebsitesLinks",
+              "returnValue": "html",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {
+          "trimValues": true
+        }
+      },
+      "id": "decb33a7-f69b-4a8a-b823-c5efec07cffe",
+      "name": "HTML Extract",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json[\"url\"] }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "={{ $json[\"logic\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "ef5de47d-78fc-4412-8207-bfb10b5aa56b",
+      "name": "A-Z",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        840,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "extractionValues": {
+          "values": [
+            {
+              "key": "items",
+              "cssSelector": "div",
+              "returnValue": "html",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a72262aa-a271-45f9-bb62-571a6abc40fd",
+      "name": "HTML Extract1",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=0",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sources",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "21a9aff3-08f1-41f5-87de-f44f328ba095",
+      "name": "Get Mil Domains",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        380,
+        520
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataPropertyName": "items",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "url",
+              "cssSelector": "a",
+              "returnValue": "attribute",
+              "attribute": "href"
+            },
+            {
+              "key": "name",
+              "cssSelector": "a",
+              "returnValue": "html"
+            }
+          ]
+        },
+        "options": {
+          "trimValues": true
+        }
+      },
+      "id": "f77cf661-8eed-4bfc-a836-d94c510c47ae",
+      "name": "HTML Extract3",
+      "type": "n8n-nodes-base.htmlExtract",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtMinute": 15
+            }
+          ]
+        }
+      },
+      "id": "fffe5577-4b1a-4b0a-b0ea-ef4772581a78",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        60,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "multiplex",
+        "options": {}
+      },
+      "id": "c274eb2c-25df-409d-be4d-89abea5c989e",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "file",
+        "operation": "edit",
+        "owner": "TheBoatyMcBoatFace",
+        "repository": "Data-Sets",
+        "filePath": "Government/US/Assets/Domains/MIL.json",
+        "binaryData": true,
+        "commitMessage": "Magic Upsert",
+        "additionalParameters": {
+          "author": {
+            "name": "Bentley Hensel",
+            "email": "bfhensel@gmail.com"
+          }
+        }
+      },
+      "id": "93a7d3b9-a970-4733-a1a0-78a47d5478e5",
+      "name": "GitHub",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        3020,
+        80
+      ],
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "7",
+          "name": "GitHub account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "aggregateItems",
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "items"
+      },
+      "id": "1a2ecab1-c6d1-44c8-b164-380a802582ce",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        2500,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "jsonToBinary",
+        "options": {}
+      },
+      "id": "756eead1-69e5-4ce6-862b-ba12fd932bde",
+      "name": "Move Binary Data",
+      "type": "n8n-nodes-base.moveBinaryData",
+      "typeVersion": 1,
+      "position": [
+        2720,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "data",
+              "value": "={{ $json[\"data\"][0] }}"
+            },
+            {
+              "name": "source",
+              "value": "={{ $node[\"A-Z\"].json[\"Source\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f72b0f68-55f8-42bc-bb97-5768bdf1534c",
+      "name": "Set2",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "url",
+              "value": "={{ $json[\"url\"] }}"
+            },
+            {
+              "name": "name",
+              "value": "={{ $json[\"name\"] }}"
+            },
+            {
+              "name": "source",
+              "value": "={{ $json[\"source\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "dotNotation": true
+        }
+      },
+      "id": "9df23fa7-2e8b-4fb8-95bc-7a41b6979a12",
+      "name": "Set Cleaned",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        2140,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "source",
+              "value": "={{ $json[\"source\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f07913e0-a709-4775-80f2-8ef6ee4da23b",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "removeDuplicates",
+        "compare": "selectedFields",
+        "fieldsToCompare": {
+          "fields": [
+            {
+              "fieldName": "url"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9ef67f2b-daf1-46b3-ab9d-201232719f91",
+      "name": "Item Lists1",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        2340,
+        540
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": "CivicActions",
+        "repository": "public-sector-a11y",
+        "filePath": "data/domains/dod.json",
+        "binaryData": true,
+        "commitMessage": "Magic Upsert",
+        "additionalParameters": {
+          "author": {
+            "name": "TheBoatyMcBoatFace",
+            "email": "bentley.hensel@civicactions.com"
+          }
+        }
+      },
+      "id": "dd298891-37d5-47f0-8bea-6b0ca578ee48",
+      "name": "CA Github",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        3020,
+        340
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "4",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrencyRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2023-01-19T07:47:50.740Z",
+  "versionId": "cb1b8fba-f173-4329-8ef5-5746671df6c5"
+}
