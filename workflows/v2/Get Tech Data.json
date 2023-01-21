@@ -1,0 +1,148 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        []
+      ]
+    },
+    "Postgres": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-21T08:51:35.562Z",
+  "id": "12",
+  "name": "Get Tech Data",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "8d09b15e-bd4f-418f-bbc2-63fb9b06522c",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        600,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1FjlQeHbuHzj-QCaFGMvipHMC5Oh6SKpGDLCFNVzgYTc/edit#gid=2090244029",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1FjlQeHbuHzj-QCaFGMvipHMC5Oh6SKpGDLCFNVzgYTc/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "e4d3f40d-f249-487e-b488-78e8378d78ab",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        880,
+        520
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": " select url, dod, applications\nfrom a11y.tech_scans where recorded IS NOT TRUE LIMIT 1;",
+        "additionalFields": {}
+      },
+      "id": "8469ac3a-ef75-4047-b483-d195591925d9",
+      "name": "Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        860,
+        320
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "1",
+          "name": "Gates of the Arctic (gota)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "applications",
+        "options": {}
+      },
+      "id": "743775ba-6068-4d07-99ec-6de1c404f823",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "0032cfa4-c067-42b8-ae8d-e0ce0a7dfae7",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        320
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-21T09:29:16.504Z",
+  "versionId": "25e2555c-863d-465a-bb1b-be984013e385"
+}
