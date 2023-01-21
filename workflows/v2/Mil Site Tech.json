@@ -1,0 +1,410 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Get DoD Domains",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get DoD Domains": {
+      "main": [
+        [
+          {
+            "node": "Filter capture errors",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split In Batches": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Did it Fail?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Did it Fail?": {
+      "main": [
+        [
+          {
+            "node": "Set1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Capture Error": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Postgres1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres1": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter capture errors": {
+      "main": [
+        [
+          {
+            "node": "Split In Batches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set1": {
+      "main": [
+        [
+          {
+            "node": "Mark Capture Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-21T06:36:40.099Z",
+  "id": "10",
+  "name": "Mil Site Tech",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1aa2e4c1-3f1e-4b87-8126-aec10a214bef",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        280,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=1243942116",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1243942116,
+          "mode": "list",
+          "cachedResultName": ".MIL",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=1243942116"
+        },
+        "options": {}
+      },
+      "id": "95f976e5-b085-4f27-b028-dd96a086bdbf",
+      "name": "Get DoD Domains",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        520,
+        360
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "d37b8358-08dc-4b43-a6a2-079ecb0204d6",
+      "name": "Split In Batches",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://tech-scan.bentleyhensel.com/extract",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "url",
+              "value": "={{ $json[\"url\"] }}"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {}
+          },
+          "response": {
+            "response": {}
+          },
+          "timeout": 10000
+        }
+      },
+      "id": "79bd6860-0416-4197-8ff6-d08df9055342",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1400,
+        340
+      ],
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"applications\"] }}",
+              "operation": "isEmpty"
+            }
+          ]
+        }
+      },
+      "id": "aca0b93c-9564-4034-a812-cad78cca8a73",
+      "name": "Did it Fail?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=1243942116",
+          "mode": "url",
+          "__regex": "https:\\/\\/(?:drive|docs)\\.google\\.com\\/\\w+\\/d\\/([0-9a-zA-Z\\-_]+)(?:\\/.*|)"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1243942116,
+          "mode": "list",
+          "cachedResultName": ".MIL",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14SDbWLXuQL_Flt5pVIsnmsg2-r5wvWPZGZkWDeTstfE/edit#gid=1243942116"
+        },
+        "columnToMatchOn": "url",
+        "valueToMatchOn": "={{ $json[\"url\"] }}",
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "capture_error",
+              "fieldValue": "true"
+            }
+          ]
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED"
+        }
+      },
+      "id": "1cd4dc66-3cce-46fd-a22c-e49d673e515f",
+      "name": "Mark Capture Error",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        2160,
+        200
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "unit": "seconds"
+      },
+      "id": "b3997a85-79d4-4f7e-b89d-026dde50ceb6",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        2320,
+        -60
+      ],
+      "webhookId": "a6d9b5da-f1fc-4be4-9c0e-a91b52a0dff2"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "url",
+              "value": "={{ Object.keys($json[\"urls\"]).join(', ') }}"
+            },
+            {
+              "name": "language",
+              "value": "={{ $json[\"meta\"][\"language\"] }}"
+            },
+            {
+              "name": "apps",
+              "value": "={{ $json[\"applications\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c376da14-2eba-401a-af1b-0607a9f5b572",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1840,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "=INSERT INTO a11y.tech_scans (url, apps, language)\nVALUES ($1, $2, $3)ON CONFLICT (url) \nDO UPDATE SET apps = EXCLUDED.apps,language = EXCLUDED.language;\n",
+        "additionalFields": {
+          "queryParams": "url,apps,language"
+        }
+      },
+      "id": "ca04466a-11fd-4e6f-81af-91aa87be6a29",
+      "name": "Postgres1",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [
+        2320,
+        520
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "1",
+          "name": "Gates of the Arctic (gota)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json[\"capture_error\"] }}",
+              "operation": "isEmpty"
+            }
+          ]
+        }
+      },
+      "id": "bcff5641-52a5-4bf1-9373-73a988b5f17d",
+      "name": "Filter capture errors",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        760,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "url",
+              "value": "={{ Object.keys($json[\"urls\"]).join(', ') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f010de5d-e7fe-488e-a220-46ac01972553",
+      "name": "Set1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        1900,
+        240
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-21T10:09:54.379Z",
+  "versionId": "58014059-dd8f-43b8-9e7e-3a92c96bfc04"
+}
