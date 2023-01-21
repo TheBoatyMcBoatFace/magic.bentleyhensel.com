@@ -21,17 +21,6 @@
       "main": [
         [
           {
-            "node": "Split In Batches",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split In Batches": {
-      "main": [
-        [
-          {
             "node": "Item Lists",
             "type": "main",
             "index": 0
@@ -91,7 +80,7 @@
     {
       "parameters": {
         "operation": "executeQuery",
-        "query": " select url, dod, applications\nfrom a11y.tech_scans where recorded IS NOT TRUE LIMIT 1;",
+        "query": "select url, dod, apps\nfrom a11y.tech_scans\nwhere recorded IS NOT TRUE LIMIT 1;",
         "additionalFields": {}
       },
       "id": "8469ac3a-ef75-4047-b483-d195591925d9",
@@ -111,7 +100,7 @@
     },
     {
       "parameters": {
-        "fieldToSplitOut": "applications",
+        "fieldToSplitOut": "apps",
         "options": {}
       },
       "id": "743775ba-6068-4d07-99ec-6de1c404f823",
@@ -119,30 +108,228 @@
       "type": "n8n-nodes-base.itemLists",
       "typeVersion": 1,
       "position": [
-        1340,
+        1240,
         320
       ]
     },
     {
       "parameters": {
-        "batchSize": 1,
+        "keepOnlySet": true,
         "options": {}
       },
-      "id": "0032cfa4-c067-42b8-ae8d-e0ce0a7dfae7",
-      "name": "Split In Batches",
-      "type": "n8n-nodes-base.splitInBatches",
+      "id": "3f92fee0-4973-43f2-85a8-b6ac4c9f98ee",
+      "name": "Set2",
+      "type": "n8n-nodes-base.set",
       "typeVersion": 1,
       "position": [
-        1080,
-        320
+        1160,
+        200
       ]
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Set2": [
+      {
+        "json": {
+          "name": "Bootstrap",
+          "confidence": "100",
+          "version": "3.4.1",
+          "icon": "Bootstrap.png",
+          "website": "https://getbootstrap.com",
+          "cpe": "cpe:/a:getbootstrap:bootstrap",
+          "categories": [
+            {
+              "66": "UI frameworks"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "DNN",
+          "confidence": "100",
+          "version": "true",
+          "icon": "DNN.png",
+          "website": "http://dnnsoftware.com",
+          "cpe": "cpe:/a:dnnsoftware:dotnetnuke",
+          "categories": [
+            {
+              "1": "CMS"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "Font Awesome",
+          "confidence": "100",
+          "version": null,
+          "icon": "Font Awesome.png",
+          "website": "http://fontawesome.io",
+          "cpe": null,
+          "categories": [
+            {
+              "17": "Font scripts"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "Google Analytics",
+          "confidence": "100",
+          "version": null,
+          "icon": "Google Analytics.svg",
+          "website": "http://google.com/analytics",
+          "cpe": null,
+          "categories": [
+            {
+              "10": "Analytics"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "Google Font API",
+          "confidence": "100",
+          "version": null,
+          "icon": "Google Font API.png",
+          "website": "http://google.com/fonts",
+          "cpe": null,
+          "categories": [
+            {
+              "17": "Font scripts"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "Matomo",
+          "confidence": "100",
+          "version": null,
+          "icon": "Matomo.png",
+          "website": "https://matomo.org",
+          "cpe": "cpe:/a:matomo:matomo",
+          "categories": [
+            {
+              "10": "Analytics"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "MediaElement.js",
+          "confidence": "100",
+          "version": "4.2.9",
+          "icon": "MediaElement.js.png",
+          "website": "http://www.mediaelementjs.com",
+          "cpe": null,
+          "categories": [
+            {
+              "14": "Video players"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "Microsoft ASP.NET",
+          "confidence": "100",
+          "version": null,
+          "icon": "Microsoft ASP.NET.png",
+          "website": "https://www.asp.net",
+          "cpe": "cpe:/a:microsoft:asp.net",
+          "categories": [
+            {
+              "18": "Web frameworks"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "jQuery",
+          "confidence": "100",
+          "version": "3.5.1",
+          "icon": "jQuery.svg",
+          "website": "https://jquery.com",
+          "cpe": "cpe:/a:jquery:jquery",
+          "categories": [
+            {
+              "59": "JavaScript libraries"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "jQuery Migrate",
+          "confidence": "100",
+          "version": "3.0.0",
+          "icon": "jQuery.svg",
+          "website": "https://github.com/jquery/jquery-migrate",
+          "cpe": null,
+          "categories": [
+            {
+              "59": "JavaScript libraries"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "jQuery UI",
+          "confidence": "100",
+          "version": "1.12.1",
+          "icon": "jQuery UI.svg",
+          "website": "http://jqueryui.com",
+          "cpe": "cpe:/a:jquery:jquery_ui",
+          "categories": [
+            {
+              "59": "JavaScript libraries"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "IIS",
+          "confidence": "0",
+          "version": null,
+          "icon": "IIS.png",
+          "website": "http://www.iis.net",
+          "cpe": "cpe:/a:microsoft:internet_information_server",
+          "categories": [
+            {
+              "22": "Web servers"
+            }
+          ]
+        }
+      },
+      {
+        "json": {
+          "name": "Windows Server",
+          "confidence": "0",
+          "version": null,
+          "icon": "WindowsServer.png",
+          "website": "http://microsoft.com/windowsserver",
+          "cpe": null,
+          "categories": [
+            {
+              "28": "Operating systems"
+            }
+          ]
+        }
+      }
+    ]
+  },
   "settings": {},
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2023-01-21T09:29:16.504Z",
-  "versionId": "25e2555c-863d-465a-bb1b-be984013e385"
+  "updatedAt": "2023-01-21T10:09:46.286Z",
+  "versionId": "034ce09a-345e-4d25-adcd-1df09c4bc568"
 }
