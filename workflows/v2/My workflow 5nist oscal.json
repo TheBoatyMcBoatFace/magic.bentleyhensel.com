@@ -1,0 +1,162 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2023-01-27T09:27:22.630Z",
+  "id": "16",
+  "name": "My workflow 5nist oscal",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "d8cb0506-c02f-4a73-8dc9-960b0e75afc3",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "get",
+        "owner": "Usnistgov",
+        "repository": "oscal-content",
+        "filePath": "nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_HIGH-baseline-resolved-profile_catalog-min.json",
+        "additionalParameters": {}
+      },
+      "id": "e280721a-550a-40cb-ae46-a8fd0e63225f",
+      "name": "GitHub",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        540,
+        420
+      ],
+      "credentials": {
+        "githubApi": {
+          "id": "4",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "2cbef943-a09d-4f43-a6a7-c03f9c50f035",
+      "name": "Move Binary Data",
+      "type": "n8n-nodes-base.moveBinaryData",
+      "typeVersion": 1,
+      "position": [
+        840,
+        760
+      ],
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_PRIVACY-baseline_profile-min.json",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "b8581a32-e411-4785-88aa-5fd80f280ae9",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        300,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1-NNP5Ijg2DMzxJ4CKTYbZdTh6hqCLnz9wk0XRTHvVGE",
+          "mode": "list",
+          "cachedResultName": "Oscal bist",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-NNP5Ijg2DMzxJ4CKTYbZdTh6hqCLnz9wk0XRTHvVGE/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1-NNP5Ijg2DMzxJ4CKTYbZdTh6hqCLnz9wk0XRTHvVGE/edit#gid=0"
+        },
+        "dataMode": "autoMapInputData",
+        "columnToMatchOn": "A",
+        "options": {}
+      },
+      "id": "1cf92841-7088-47a5-b2fd-e84671ed0c24",
+      "name": "Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 3,
+      "position": [
+        1060,
+        640
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2",
+          "name": "bentley.hensel@civicactions.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "3ef2704c-08ee-48ca-8f96-360243216448",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        580,
+        600
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-28T01:58:48.094Z",
+  "versionId": "62ec0049-45e4-4803-8ec3-cf5fe7f93e74"
+}
