@@ -1,0 +1,162 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "HTML1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-30T22:59:31.603Z",
+  "id": "17",
+  "name": "My workflow 5",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "970c2e20-c936-4b54-b392-dc3fe3c9d570",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        280,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "repository",
+        "operation": "get",
+        "owner": "a11ywatch",
+        "repository": "a11ywatch"
+      },
+      "id": "380ab60c-e9fd-4bd3-b7fc-9a81d508227a",
+      "name": "GitHub",
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1,
+      "position": [
+        460,
+        600
+      ],
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "7",
+          "name": "GitHub account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://github.com/a11ywatch/a11ywatch/network/dependencies",
+        "options": {}
+      },
+      "id": "f1b96b3c-e475-4a03-8c27-9e9c7d04459e",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        500,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "b8438f40-905c-4211-91a4-7e9f8d291fe3",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        960,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "deps",
+              "cssSelector": "#dependencies",
+              "returnValue": "html"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5b22b8de-1bb8-4912-8307-68f6d5f69739",
+      "name": "HTML",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1,
+      "position": [
+        720,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "dataPropertyName": "deps",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "dependencies ",
+              "cssSelector": "a",
+              "returnValue": "attribute",
+              "attribute": "href",
+              "returnArray": true
+            }
+          ]
+        },
+        "options": {
+          "trimValues": true
+        }
+      },
+      "id": "eac80f00-8aff-41f9-b05e-3de89775deef",
+      "name": "HTML1",
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        320
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-30T23:27:39.222Z",
+  "versionId": "4a6b223f-edc3-40f5-801e-39a4303e0142"
+}
