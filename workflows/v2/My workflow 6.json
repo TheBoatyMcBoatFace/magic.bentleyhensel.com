@@ -1,0 +1,53 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-31T04:16:35.753Z",
+  "id": "18",
+  "name": "My workflow 6",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ca1dfa47-4968-4165-82af-3b2c6cd11e6a",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        260,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog-min.json",
+        "options": {}
+      },
+      "id": "b58f0c87-ad98-4809-85d1-99bfc211975e",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        480,
+        420
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-31T04:24:33.580Z",
+  "versionId": "2e848a86-e58d-435a-83d3-efb67056f92e"
+}
