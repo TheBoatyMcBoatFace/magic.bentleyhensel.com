@@ -1,0 +1,148 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Catalog Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic Catalog": {
+      "main": [
+        [
+          {
+            "node": "Item Lists2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Catalog Schema": {
+      "main": [
+        [
+          {
+            "node": "Item Lists",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Item Lists1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-02-01T22:33:19.300Z",
+  "id": "19",
+  "name": "OSCAL",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "4b1da1ad-ff19-4310-8882-6168d3966c0f",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        80,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "catalog.groups",
+        "options": {}
+      },
+      "id": "87023e47-54c5-4603-baeb-fc9735232a87",
+      "name": "Item Lists",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        700,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "catalog.metadata",
+        "options": {}
+      },
+      "id": "993d694b-1996-49c9-b404-d97052e4c0d7",
+      "name": "Item Lists1",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        660,
+        580
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://raw.githubusercontent.com/usnistgov/oscal-content/main/examples/catalog/json/basic-catalog.json",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "e60721cf-a2a7-4251-a65c-381715edab64",
+      "name": "Basic Catalog",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        0,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "=catalog.groups",
+        "options": {}
+      },
+      "id": "b613b33b-ede9-4504-b69e-8bf9355f6fcc",
+      "name": "Item Lists2",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [
+        220,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://github.com/usnistgov/OSCAL/blob/main/json/schema/oscal_catalog_schema.json",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "56a1d443-4095-4056-9536-172fdbc3b501",
+      "name": "Catalog Schema",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        300,
+        360
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-02-01T23:00:01.469Z",
+  "versionId": "4c9145ef-152b-4c33-af86-bfa4caba6879"
+}
