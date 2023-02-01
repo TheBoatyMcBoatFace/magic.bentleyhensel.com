@@ -1,0 +1,60 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Ghost",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-25T20:49:23.077Z",
+  "id": "13",
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "7b996d12-1821-4c39-894a-36fd7ae79a8f",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        780,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "source": "adminApi",
+        "operation": "create",
+        "additionalFields": {}
+      },
+      "id": "f285025d-9288-4f5f-a14e-380db77b7a78",
+      "name": "Ghost",
+      "type": "n8n-nodes-base.ghost",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        380
+      ],
+      "credentials": {
+        "ghostAdminApi": {
+          "id": "10",
+          "name": "Ghost Admin account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-25T20:49:23.077Z",
+  "versionId": "dab1adbd-a24f-44e9-8f30-38449c9e9202"
+}
