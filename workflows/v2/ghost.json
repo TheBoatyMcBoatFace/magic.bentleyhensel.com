@@ -1,0 +1,86 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Ghost",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2023-01-25T22:04:16.773Z",
+  "id": "15",
+  "name": "ghost",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "6ca71301-c484-4adb-b5e3-47a5c4437ab5",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        480,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "source": "adminApi",
+        "operation": "create",
+        "title": "={{ $json[\"title\"] }}",
+        "content": "={{ $json[\"content:encoded\"] }}",
+        "additionalFields": {}
+      },
+      "id": "fdee55b7-3185-4161-b7b8-68b647698805",
+      "name": "Ghost",
+      "type": "n8n-nodes-base.ghost",
+      "typeVersion": 1,
+      "position": [
+        960,
+        380
+      ],
+      "credentials": {
+        "ghostAdminApi": {
+          "id": "10",
+          "name": "Ghost Admin account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://medium.com/feed/@civicactionswriter"
+      },
+      "id": "df97ff8d-79ec-4bca-bfd4-2279cd638be3",
+      "name": "RSS Read",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        700,
+        380
+      ]
+    }
+  ],
+  "pinData": {},
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2023-01-25T23:42:37.490Z",
+  "versionId": "7d0626e4-abf6-42e0-ad4e-80be726cdc11"
+}
